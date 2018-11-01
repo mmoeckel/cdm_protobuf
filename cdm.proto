@@ -1,0 +1,243 @@
+syntax = "proto3";
+
+// This is a protocol buffer implementation of the Consultive Committee for Space Data Systems
+// (CCSDS) recommended standard 508.0-B-1 - Conjunction Data Message.
+// https://public.ccsds.org/Pubs/508x0b1e2c1.pdf
+package ConjunctionDataMessage;
+
+enum VolumeFrame {
+    RTN = 0;
+    TVN = 1;
+}
+
+enum VolumeShape {
+    ELLIPSOID = 0;
+    BOX = 1;
+}
+
+// Values currently registered at https://sanaregistry.org
+enum CollisionProbabilityMethod {
+    AKELLAALFRIEND_2000 = 0;
+    ALFANO_2005 = 1;
+    ALFANO_MAX_PROBABILITY = 2;
+    ALFANO_PARAL_2007 = 3;
+    ALFANO_TUBES_2007 = 4;
+    ALFANO_VOXELS_2006 = 5;
+    ALFRIEND_1999 = 6;
+    CHAN_1997 = 7;
+    CHAN_2003 = 8;
+    FOSTER_1992 = 9;
+    MCKINLEY_2006 = 10;
+    PATERA_2001 = 11;
+    PATERA_2003 = 12;
+    PATERA_2005 = 13;
+}
+
+enum ObjectNumber {
+    OBJECT1 = 0;
+    OBJECT2 = 1;
+}
+
+enum ObjectType {
+    PAYLOAD = 0;
+    ROCKET_BODY = 1;
+    DEBRIS = 2;
+    UNKNOWN = 3;
+    OTHER = 4;
+}
+
+enum CovarianceMethod {
+    CALCULATED = 0;
+    DEFAULT = 1;
+}
+
+enum ReferenceFrame {
+    GCRF = 0;
+    EME2000 = 1;
+    ITRF = 2;
+}
+
+enum LiteralBool {
+    YES = 0;
+    NO = 1;
+    N_A = 2;
+}
+
+message Header {
+    // Format version in the form of ‘x.y’, where ‘y’ is incremented for corrections
+    // and minor changes, and ‘x’ is incremented for major changes.
+    /*required*/ float CCSDS_CDM_VERS = 1;
+    // (See 6.3.4 for formatting rules.)
+    string COMMENT = 2;
+    // Message creation date/time in Coordinated Universal Time (UTC). (See 6.3.2.6 for formatting rules.)
+    /*required*/ string CREATION_DATE = 3;
+    // Creating agency or owner/operator. Value should be the ‘Abbreviation’ value
+    // from the SANA ‘Organizations’ registry (https://sanaregistry.org/r/organizations)
+    // for an organization that has the Role of ‘Conjunction Data Message Originator’.
+    // (See 5.2.9 for formatting rules.)
+    /*required*/ string ORIGINATOR = 4;
+    // Spacecraft name(s) for which the CDM is provided.
+    string MESSAGE_FOR = 5;
+    // ID that uniquely identifies a message from a given originator. The format and
+    // content of the message identifier value are at the discretion of the originator.
+    // (See 5.2.9 for formatting rules.)
+    /*required*/ string MESSAGE_ID = 6;
+}
+
+message RelativeMetadata {
+    // (See 6.3.4 for formatting rules.)
+    string COMMENT = 1;
+    // The date and time in UTC of the closest approach. (See 6.3.2.6 for formatting rules.)
+    /*required*/ string TCA = 2;
+    // The norm of the relative position vector. It indicates how close the two objects are at TCA.
+    /*required*/ double MISS_DISTANCE = 3;
+    double RELATIVE_POSITION_R = 5;
+    double RELATIVE_SPEED = 4;
+    double RELATIVE_POSITION_T = 6;
+    double RELATIVE_POSITION_N = 7;
+    double RELATIVE_VELOCITY_R = 8;
+    double RELATIVE_VELOCITY_T = 9;
+    double RELATIVE_VELOCITY_N = 10;
+    string START_SCREEN_PERIOD = 11;
+    string STOP_SCREEN_PERIOD = 12;
+    VolumeFrame SCREEN_VOLUME_FRAME = 13;
+    VolumeShape SCREEN_VOLUME_SHAPE = 14;
+    double SCREEN_VOLUME_X = 15;
+    double SCREEN_VOLUME_Y = 16;
+    double SCREEN_VOLUME_Z = 17;
+    string SCREEN_ENTRY_TIME = 18;
+    string SCREEN_EXIT_TIME = 19;
+    double COLLISION_PROBABILITY = 20;
+    // The method used to compute the value associated with the COLLISION_PROBABILITY keyword.
+    // Example options are ‘FOSTER-1992’ (see reference [F4]), ‘CHAN-1997’ (see reference [F8]),
+    // ‘PATERA-2001’ (see reference [F6]), ‘ALFANO-2005’ (see reference [F7]), and ‘MCKINLEY-2006’
+    // (see reference [F9]). A list of currently registered options is available on the SANA
+    // Registry at http://sanaregistry.org. (To register a new option for this keyword, see annex B,
+    // subsection B2.)
+    CollisionProbabilityMethod COLLISION_PROBABILITY_METHOD = 21;
+}
+
+message CdmMetadata {
+    string COMMENT = 1;
+    /*required*/ ObjectNumber OBJECT = 2;
+    /*required*/ string OBJECT_DESIGNATOR = 3;
+    /*required*/ string CATALOG_NAME = 4;
+    /*required*/ string OBJECT_NAME = 5;
+    /*required*/ string INTERNATIONAL_DESIGNATOR = 6;
+    ObjectType OBJECT_TYPE = 7;
+    string OPERATOR_CONTACT_POSITION = 8;
+    string OPERATOR_ORGANIZATION = 9;
+    string OPERATOR_PHONE = 10;
+    string OPERATOR_EMAIL = 11;
+    /*required*/ string EPHEMERIS_NAME = 12;
+    /*required*/ CovarianceMethod COVARIANCE_METHOD = 13;
+    /*required*/ LiteralBool MANEUVERABLE = 14;
+    string ORBIT_CENTER = 15;
+    /*required*/ ReferenceFrame REF_FRAME = 16;
+    string GRAVITY_MODEL = 17;
+    string ATMOSPHERIC_MODEL = 18;
+    string N_BODY_PERTURBATIONS = 19;
+    LiteralBool SOLAR_RAD_PRESSURE = 20;
+    LiteralBool EARTH_TIDES = 21;
+    LiteralBool INTRACK_THRUST = 22;
+}
+
+message OdParameters {
+    string COMMENT = 1;
+    string TIME_LASTOB_START = 2;
+    string TIME_LASTOB_END = 3;
+    double RECOMMENDED_OD_SPAN = 4;
+    double ACTUAL_OD_SPAN = 5;
+    int32 OBS_AVAILABLE = 6;
+    int32 OBS_USED = 7;
+    int32 TRACKS_AVAILABLE = 8;
+    int32 TRACKS_USED = 9;
+    double RESIDUALS_ACCEPTED = 10;
+    double WEIGHTED_RMS = 11;
+}
+
+message AdditionalParameters {
+    string COMMENT = 1;
+    double AREA_PC = 2;
+    double AREA_DRG = 3;
+    double AREA_SRP = 4;
+    double MASS = 5;
+    double CD_AREA_OVER_MASS = 6;
+    double CR_AREA_OVER_MASS = 7;
+    double THRUST_ACCELERATION = 8;
+    double SEDR = 9;
+}
+
+message StateVector {
+    string COMMENT = 1;
+    double X = 2;
+    double Y = 3;
+    double Z = 4;
+    double X_DOT = 5;
+    double Y_DOT = 6;
+    double Z_DOT = 7;
+}
+
+message CovarianceMatrix {
+    string COMMENT = 1;
+    /*required*/ double CR_R = 2;
+    /*required*/ double CT_R = 3;
+    /*required*/ double CT_T = 4;
+    /*required*/ double CN_R = 5;
+    /*required*/ double CN_T = 6;
+    /*required*/ double CN_N = 7;
+    /*required*/ double CRDOT_R = 8;
+    /*required*/ double CRDOT_T = 9;
+    /*required*/ double CRDOT_N = 10;
+    /*required*/ double CRDOT_RDOT = 11;
+    /*required*/ double CTDOT_R = 12;
+    /*required*/ double CTDOT_T = 13;
+    /*required*/ double CTDOT_N = 14;
+    /*required*/ double CTDOT_RDOT = 15;
+    /*required*/ double CTDOT_TDOT = 16;
+    /*required*/ double CNDOT_R = 17;
+    /*required*/ double CNDOT_T = 18;
+    /*required*/ double CNDOT_N = 19;
+    /*required*/ double CNDOT_RDOT = 20;
+    /*required*/ double CNDOT_TDOT = 21;
+    /*required*/ double CNDOT_NDOT = 22;
+    double CDRG_R = 23;
+    double CDRG_T = 24;
+    double CDRG_N = 25;
+    double CDRG_RDOT = 26;
+    double CDRG_TDOT = 27;
+    double CDRG_NDOT = 28;
+    double CDRG_DRG = 29;
+    double CSRP_R = 30;
+    double CSRP_T = 31;
+    double CSRP_N = 32;
+    double CSRP_RDOT = 33;
+    double CSRP_TDOT = 34;
+    double CSRP_NDOT = 35;
+    double CSRP_DRG = 36;
+    double CSRP_SRP = 37;
+    double CTHR_R = 38;
+    double CTHR_T = 39;
+    double CTHR_N = 40;
+    double CTHR_RDOT = 41;
+    double CTHR_TDOT = 42;
+    double CTHR_NDOT = 43;
+    double CTHR_DRG = 44;
+    double CTHR_SRP = 45;
+    double CTHR_THR = 46;
+}
+
+message CdmData {
+    string COMMENT = 1;
+    OdParameters odParameters = 2;
+    AdditionalParameters additionalParameters = 3;
+    StateVector stateVector = 4;
+    CovarianceMatrix covarianceMatrix = 5;
+}
+
+message CDM {
+    Header header = 1;
+    RelativeMetadata relativeMetadata = 2;
+    CdmMetadata cdmMetadata = 3;
+    CdmData cdmData = 4;
+}
