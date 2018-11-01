@@ -1,22 +1,27 @@
 syntax = "proto3";
 
 // This is a protocol buffer implementation of the Consultive Committee for Space Data Systems
-// (CCSDS) recommended standard 508.0-B-1 - Conjunction Data Message.
+// (CCSDS) recommended standard 508.0-B-1 - Conjunction Data Message, including all revisions
+// as of June 2018. The document can be found here:
 // https://public.ccsds.org/Pubs/508x0b1e2c1.pdf
-package ConjunctionDataMessage;
+// All section numbers in the comments refer to this file.
+package CDM;
 
-enum VolumeFrame {
+enum VolumeFrame
+{
     RTN = 0;
     TVN = 1;
 }
 
-enum VolumeShape {
+enum VolumeShape
+{
     ELLIPSOID = 0;
     BOX = 1;
 }
 
-// Values currently registered at https://sanaregistry.org
-enum CollisionProbabilityMethod {
+// Valid values for COLLISION_PROBABILITY_METHOD currently registered at https://sanaregistry.org
+enum CollisionProbabilityMethod
+{
     AKELLAALFRIEND_2000 = 0;
     ALFANO_2005 = 1;
     ALFANO_MAX_PROBABILITY = 2;
@@ -33,12 +38,14 @@ enum CollisionProbabilityMethod {
     PATERA_2005 = 13;
 }
 
-enum ObjectNumber {
+enum ObjectNumber
+{
     OBJECT1 = 0;
     OBJECT2 = 1;
 }
 
-enum ObjectType {
+enum ObjectType
+{
     PAYLOAD = 0;
     ROCKET_BODY = 1;
     DEBRIS = 2;
@@ -46,188 +53,537 @@ enum ObjectType {
     OTHER = 4;
 }
 
-enum CovarianceMethod {
+enum CovarianceMethod
+{
     CALCULATED = 0;
     DEFAULT = 1;
 }
 
-enum ReferenceFrame {
+enum ReferenceFrame
+{
     GCRF = 0;
     EME2000 = 1;
     ITRF = 2;
 }
 
-enum LiteralBool {
+enum LiteralBool
+{
     YES = 0;
     NO = 1;
     N_A = 2;
 }
 
-message Header {
+message Header
+{
     // Format version in the form of ‘x.y’, where ‘y’ is incremented for corrections
     // and minor changes, and ‘x’ is incremented for major changes.
     /*required*/ float CCSDS_CDM_VERS = 1;
-    // (See 6.3.4 for formatting rules.)
+
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 2;
+
     // Message creation date/time in Coordinated Universal Time (UTC). (See 6.3.2.6 for formatting rules.)
     /*required*/ string CREATION_DATE = 3;
+
     // Creating agency or owner/operator. Value should be the ‘Abbreviation’ value
     // from the SANA ‘Organizations’ registry (https://sanaregistry.org/r/organizations)
     // for an organization that has the Role of ‘Conjunction Data Message Originator’.
     // (See 5.2.9 for formatting rules.)
     /*required*/ string ORIGINATOR = 4;
+
     // Spacecraft name(s) for which the CDM is provided.
     string MESSAGE_FOR = 5;
+
     // ID that uniquely identifies a message from a given originator. The format and
     // content of the message identifier value are at the discretion of the originator.
     // (See 5.2.9 for formatting rules.)
     /*required*/ string MESSAGE_ID = 6;
 }
 
-message RelativeMetadata {
-    // (See 6.3.4 for formatting rules.)
+message RelativeMetadata
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
     // The date and time in UTC of the closest approach. (See 6.3.2.6 for formatting rules.)
     /*required*/ string TCA = 2;
+
     // The norm of the relative position vector. It indicates how close the two objects are at TCA.
+    // Unit: m
     /*required*/ double MISS_DISTANCE = 3;
-    double RELATIVE_POSITION_R = 5;
+
+    // The norm of the relative velocity vector. It indicates how fast the two objects are moving
+    // relative to each other at TCA.
+    // Unit: m/s
     double RELATIVE_SPEED = 4;
+
+    // The R component of Object2’s position relative to Object1’s position in the Radial,
+    // Transverse, and Normal (RTN) coordinate frame. (See annex E for definition.)
+    // Unit: m
+    double RELATIVE_POSITION_R = 5;
+
+    // The T component of Object2’s position relative to Object1’s position in the RTN coordinate
+    // frame. (See annex E for definition.)
+    // Unit: m
     double RELATIVE_POSITION_T = 6;
+
+    // The N component of Object2’s position relative to Object1’s position in the RTN
+    // coordinate frame. (See annex E for definition.)
+    // Unit: m
     double RELATIVE_POSITION_N = 7;
+    // The R component of Object2’s velocity relative to Object1’s velocity in the RTN coordinate
+    // frame. (See annex E for definition.)
+    // Unit: m/s
     double RELATIVE_VELOCITY_R = 8;
+
+    // The T component of Object2’s velocity relative to Object1’s velocity in the RTN coordinate
+    // frame. (See annex E for definition.)
+    // Unit: m/s
     double RELATIVE_VELOCITY_T = 9;
+
+    // The N component of Object2’s velocity relative to Object1’s velocity in the RTN coordinate
+    // frame. (See annex E for definition.)
+    // Unit: m/s
     double RELATIVE_VELOCITY_N = 10;
+
+    // The start time in UTC of the screening period for the conjunction assessment. (See 6.3.2.6
+    // for formatting rules.)
     string START_SCREEN_PERIOD = 11;
+
+    // The stop time in UTC of the screening period for the conjunction assessment. (See 6.3.2.6
+    // for formatting rules.)
     string STOP_SCREEN_PERIOD = 12;
+
+    // Name of the Object1 centered reference frame in which the screening volume data are given.
+    // Available options are RTN and Transverse, Velocity, and Normal (TVN). (See annex E for
+    // definition.)
     VolumeFrame SCREEN_VOLUME_FRAME = 13;
+
+    //Shape of the screening volume: ELLIPSOID or BOX.
     VolumeShape SCREEN_VOLUME_SHAPE = 14;
+
+    // The R or T (depending on if RTN or TVN is selected) component size of the screening
+    // volume in the SCREEN_VOLUME_FRAME.
+    // Unit: m
     double SCREEN_VOLUME_X = 15;
+
+    // The T or V (depending on if RTN or TVN is selected) component size of the screening
+    // volume in the SCREEN_VOLUME_FRAME.
+    // Unit: m
     double SCREEN_VOLUME_Y = 16;
+
+    // The N component size of the screening volume in the SCREEN_VOLUME_FRAME.
+    // Unit: m
     double SCREEN_VOLUME_Z = 17;
+
+    // The time in UTC when Object2 enters the screening volume. (See 6.3.2.6 for formatting rules.)
     string SCREEN_ENTRY_TIME = 18;
+
+    // The time in UTC when Object2 exits the screening volume. (See 6.3.2.6 for formatting rules.)
     string SCREEN_EXIT_TIME = 19;
+
+    // The probability (denoted ‘p’ where 0.0<=p<=1.0), that Object1 and Object2 will collide.
     double COLLISION_PROBABILITY = 20;
+
     // The method used to compute the value associated with the COLLISION_PROBABILITY keyword.
-    // Example options are ‘FOSTER-1992’ (see reference [F4]), ‘CHAN-1997’ (see reference [F8]),
-    // ‘PATERA-2001’ (see reference [F6]), ‘ALFANO-2005’ (see reference [F7]), and ‘MCKINLEY-2006’
-    // (see reference [F9]). A list of currently registered options is available on the SANA
-    // Registry at http://sanaregistry.org. (To register a new option for this keyword, see annex B,
-    // subsection B2.)
+    // A list of currently registered options is available on the SANA Registry at
+    // http://sanaregistry.org. (To register a new option for this keyword, see annex B, subsection B2.)
     CollisionProbabilityMethod COLLISION_PROBABILITY_METHOD = 21;
 }
 
-message CdmMetadata {
+message CdmMetadata
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
+    // The object to which the metadata and data apply (Object1 or Object2).
     /*required*/ ObjectNumber OBJECT = 2;
+
+    // The satellite catalog designator for the object. (See 5.2.9 for formatting rules.)
     /*required*/ string OBJECT_DESIGNATOR = 3;
+
+    // The satellite catalog used for the object. Value should be taken from the SANA ‘Conjunction Data
+    // Message CATALOG_NAME’ registry (https://sanaregistry.org/r/cdm_catalog). (See 5.2.9 for
+    // formatting rules.)
     /*required*/ string CATALOG_NAME = 4;
+
+    // Spacecraft name for the object.
     /*required*/ string OBJECT_NAME = 5;
+
+    // The full international designator for the object. Values shall have the format
+    // YYYY-NNNP{PP}, where:
+    // YYYY = year of launch;
+    // NNN = three-digit serial number of launch (with leading zeros);
+    // P{PP} = At least one capital letter for the identification of the part brought into
+    // space by the launch. In cases where the object has no international designator, the
+    // value UNKNOWN should be used.
+    //(See 5.2.9 for further formatting rules.)
     /*required*/ string INTERNATIONAL_DESIGNATOR = 6;
+
+    // The object type (payload, rocket body, debris, unknown, or other).
     ObjectType OBJECT_TYPE = 7;
+
+    // Contact position of the owner/operator of the object (e.g. "network controller").
     string OPERATOR_CONTACT_POSITION = 8;
+
+    // Contact organization of the object (e.g. "ESA")
     string OPERATOR_ORGANIZATION = 9;
+
+    // Phone number of the contact position or organization for the object.
     string OPERATOR_PHONE = 10;
+
+    // Email address of the contact position or organization of the object.
     string OPERATOR_EMAIL = 11;
+
+    // Unique name of the external ephemeris file used for the object or NONE. This is used
+    // to indicate whether an external (i.e., Owner/Operator [O/O] provided) ephemeris file was
+    // used to calculate the CA. If ‘NONE’ is specified, then the output of the most current
+    // Orbit Determination (OD) of the CDM originator was used in the CA.
     /*required*/ string EPHEMERIS_NAME = 12;
+
+    // Method used to calculate the covariance during the OD that produced the state vector, or
+    // whether an arbitrary, non-calculated default value was used. Caution should be used
+    // when using the default value for calculating collision probability.
     /*required*/ CovarianceMethod COVARIANCE_METHOD = 13;
+
+    // The maneuver capacity of the object. YES, NO, or N/A (not applicable or not available)
     /*required*/ LiteralBool MANEUVERABLE = 14;
+
+    // The central body about which Object1 and Object2 orbit. If not specified, the center is
+    // assumed to be Earth.
     string ORBIT_CENTER = 15;
+
+    // Name of the reference frame in which the state vector data are given. Value must be
+    // the same for both Object1 and Object2.
     /*required*/ ReferenceFrame REF_FRAME = 16;
+
+    // The gravity model used for the OD of the object. (See annex E under GRAVITY_MODEL for definition).
     string GRAVITY_MODEL = 17;
+
+    // The atmospheric density model used for the OD of the object. If ‘NONE’ is specified,
+    // then no atmospheric model was used.
     string ATMOSPHERIC_MODEL = 18;
+
+    // The N-body gravitational perturbations used for the OD of the object (e.g. "MOON, SUN").
+    // If ‘NONE’ is specified, then no third-body gravitational perturbations were used.
     string N_BODY_PERTURBATIONS = 19;
+
+    // Indication of whether solar radiation pressure perturbations were used for the
+    // OD of the object. YES or NO.
     LiteralBool SOLAR_RAD_PRESSURE = 20;
+
+    // Indication of whether solid Earth and ocean tides were  used for the OD of the object. YES or NO.
     LiteralBool EARTH_TIDES = 21;
+
+    // Indication of whether in-track thrust modeling was used for the OD of the object. YES or NO.
     LiteralBool INTRACK_THRUST = 22;
 }
 
-message OdParameters {
+message OdParameters
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
+    // The start of a time interval (UTC) that contains the time of the last accepted observation.
+    // (See 6.3.2.6 for formatting rules.) For an exact time, the time interval is of zero duration
+    // (i.e., same value as that of TIME_LASTOB_END).
     string TIME_LASTOB_START = 2;
+
+    // The end of a time interval (UTC) that contains the time of the last accepted observation.
+    // (See 6.3.2.6 for formatting rules.) For an exact time, the time interval is of zero duration
+    // (i.e., same value as that of TIME_LASTOB_START).
     string TIME_LASTOB_END = 3;
+
+    // The recommended OD time span calculated for the object. (See annex E for definition.)
+    // Unit: Days
     double RECOMMENDED_OD_SPAN = 4;
+
+    // Based on the observations available and the RECOMMENDED_OD_SPAN, the actual time span used
+    // for the OD of the object. (See annex E for definition.)
+    // Unit: Days
     double ACTUAL_OD_SPAN = 5;
-    int32 OBS_AVAILABLE = 6;
-    int32 OBS_USED = 7;
-    int32 TRACKS_AVAILABLE = 8;
-    int32 TRACKS_USED = 9;
+
+    // The number of observations available for the OD of the object. (See annex E for definition.)
+    uint32 OBS_AVAILABLE = 6;
+
+    // The number of observations accepted for the OD of the object. (See annex E for definition.)
+    uint32 OBS_USED = 7;
+
+    // The number of sensor tracks available for the OD of the object. (See annex E for definition.)
+    uint32 TRACKS_AVAILABLE = 8;
+
+    // The number of sensor tracks accepted for the OD of the object. (See annex E for definition.)
+    uint32 TRACKS_USED = 9;
+
+    // The percentage of residuals accepted in the OD of the object. Range between 0.0 and 100.0.
     double RESIDUALS_ACCEPTED = 10;
+
+    // The weighted Root Mean Square (RMS) of the residuals from a batch least squares OD.
+    // (See annex E for definition.)
     double WEIGHTED_RMS = 11;
 }
 
-message AdditionalParameters {
+message AdditionalParameters
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
+    // The actual area of the object. (See annex E for definition.)
+    // Unit: m**2
     double AREA_PC = 2;
+
+    // The effective area of the object exposed to atmospheric drag. (See annex E for definition.)
+    // Unit: m**2
     double AREA_DRG = 3;
+
+    //The effective area of the object exposed to solar radiation pressure. (See annex E for definition.)
+    // Unit: m**2
     double AREA_SRP = 4;
+
+    // The mass of the object.
+    // Unit: kg
     double MASS = 5;
+
+    // The object’s C D •A/m used to propagate the state vector and covariance to TCA.
+    // (See annex E for definition.)
+    // Unit: m**2/kg
     double CD_AREA_OVER_MASS = 6;
+
+    // The object’s C r •A/m used to propagate the state vector and covariance to TCA.
+    // (See annex E for definition.)
+    // Unit: m**2/kg
     double CR_AREA_OVER_MASS = 7;
+
+    // The object’s acceleration due to in-track thrust used to propagate the state vector and
+    // covariance to TCA. (See annex E for definition.)
+    // Unit: m/2**2
     double THRUST_ACCELERATION = 8;
+
+    // The amount of energy being removed from the object’s orbit by atmospheric drag. This
+    // value is an average calculated during the OD. (See annex E for definition.)
+    // Unit: W/kg
     double SEDR = 9;
 }
 
-message StateVector {
+message StateVector
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
+    // Object Position Vector X component.
+    // Unit: km
     double X = 2;
+
+    // Object Position Vector Y component.
+    // Unit: km
     double Y = 3;
+
+    // Object Position Vector Z component.
+    // Unit: km
     double Z = 4;
+
+    // Object Velocity Vector X component.
+    // Unit: km/s
     double X_DOT = 5;
+
+    // Object Velocity Vector Y component.
+    // Unit: km/s
     double Y_DOT = 6;
+
+    // Object Velocity Vector Z component.
+    // Unit: km/s
     double Z_DOT = 7;
 }
 
-message CovarianceMatrix {
+message CovarianceMatrix
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
+
+    // Object covariance matrix [1,1].
+    // Unit: m**2
     /*required*/ double CR_R = 2;
+
+    // Object covariance matrix [2,1].
+    // Unit: m**2
     /*required*/ double CT_R = 3;
+
+    // Object covariance matrix [2,2].
+    // Unit: m**2
     /*required*/ double CT_T = 4;
+
+    // Object covariance matrix [3,1].
+    // Unit: m**2
     /*required*/ double CN_R = 5;
+
+    // Object covariance matrix [3,2].
+    // Unit: m**2
     /*required*/ double CN_T = 6;
+
+    // Object covariance matrix [3,3].
+    // Unit: m**2
     /*required*/ double CN_N = 7;
+
+    // Object covariance matrix [4,1].
+    // Unit: m**2/s
     /*required*/ double CRDOT_R = 8;
+
+    // Object covariance matrix [4,2].
+    // Unit: m**2/s
     /*required*/ double CRDOT_T = 9;
+
+    // Object covariance matrix [4,3].
+    // Unit: m**2/s
     /*required*/ double CRDOT_N = 10;
+
+    // Object covariance matrix [4,4].
+    // Unit: m**2/s**2
     /*required*/ double CRDOT_RDOT = 11;
+
+    // Object covariance matrix [5,1].
+    // Unit: m**2/s
     /*required*/ double CTDOT_R = 12;
+
+    // Object covariance matrix [5,2].
+    // Unit: m**2/s
     /*required*/ double CTDOT_T = 13;
+
+    // Object covariance matrix [5,3].
+    // Unit: m**2/s
     /*required*/ double CTDOT_N = 14;
+
+    // Object covariance matrix [5,4].
+    // Unit: m**2/s**2
     /*required*/ double CTDOT_RDOT = 15;
+
+    // Object covariance matrix [5,5].
+    // Unit: m**2/s**2
     /*required*/ double CTDOT_TDOT = 16;
+
+    // Object covariance matrix [6,1].
+    // Unit: m**2/s
     /*required*/ double CNDOT_R = 17;
+
+    // Object covariance matrix [6,2].
+    // Unit: m**2/s
     /*required*/ double CNDOT_T = 18;
+
+    // Object covariance matrix [6,3].
+    // Unit: m**2/s
     /*required*/ double CNDOT_N = 19;
+
+    // Object covariance matrix [6,4].
+    // Unit: m**2/s**2
     /*required*/ double CNDOT_RDOT = 20;
+
+    // Object covariance matrix [6,5].
+    // Unit: m**2/s**2
     /*required*/ double CNDOT_TDOT = 21;
+
+    // Object covariance matrix [6,6].
+    // Unit: m**2/s**2
     /*required*/ double CNDOT_NDOT = 22;
+
+    // Object covariance matrix [7,1].
+    // Unit: m**3/kg
     double CDRG_R = 23;
+
+    // Object covariance matrix [7,2].
+    // Unit: m**3/kg
     double CDRG_T = 24;
+
+    // Object covariance matrix [7,3].
+    // Unit: m**3/kg
     double CDRG_N = 25;
+
+    // Object covariance matrix [7,4].
+    // Unit: m**3/(kg*s)
     double CDRG_RDOT = 26;
+
+    // Object covariance matrix [7,5].
+    // Unit: m**3/(kg*s)
     double CDRG_TDOT = 27;
+
+    // Object covariance matrix [7,6].
+    // Unit: m**3/(kg*s)
     double CDRG_NDOT = 28;
+
+    // Object covariance matrix [7,7].
+    // Unit: m**4/kg**2
     double CDRG_DRG = 29;
+
+    // Object covariance matrix [8,1].
+    // Unit: m**3/kg
     double CSRP_R = 30;
+
+    // Object covariance matrix [8,2].
+    // Unit: m**3/kg
     double CSRP_T = 31;
+
+    // Object covariance matrix [8,3].
+    // Unit: m**3/kg
     double CSRP_N = 32;
+
+    // Object covariance matrix [8,4].
+    // Unit: m**3/(kg*s)
     double CSRP_RDOT = 33;
+
+    // Object covariance matrix [8,5].
+    // Unit: m**3/(kg*s)
     double CSRP_TDOT = 34;
+
+    // Object covariance matrix [8,6].
+    // Unit: m**3/(kg*s)
     double CSRP_NDOT = 35;
+
+    // Object covariance matrix [8,7].
+    // Unit: m**4/kg**2
     double CSRP_DRG = 36;
+
+    // Object covariance matrix [8,8].
+    // Unit: m**4/kg**2
     double CSRP_SRP = 37;
+
+    // Object covariance matrix [9,1].
+    // Unit: m**2/s**2
     double CTHR_R = 38;
+
+    // Object covariance matrix [9,2].
+    // Unit: m**2/s**2
     double CTHR_T = 39;
+
+    // Object covariance matrix [9,3].
+    // Unit: m**2/s**2
     double CTHR_N = 40;
+
+    // Object covariance matrix [9,4].
+    // Unit: m**2/s**3
     double CTHR_RDOT = 41;
+
+    // Object covariance matrix [9,5].
+    // Unit: m**2/s**3
     double CTHR_TDOT = 42;
+
+    // Object covariance matrix [9,6].
+    // Unit: m**2/s**3
     double CTHR_NDOT = 43;
+
+    // Object covariance matrix [9,7].
+    // Unit: m**3/(kg*s**2)
     double CTHR_DRG = 44;
+
+    // Object covariance matrix [9,8].
+    // Unit: m**3/(kg*s**2)
     double CTHR_SRP = 45;
+
+    // Object covariance matrix [9,9].
+    // Unit: m**2/s**4
     double CTHR_THR = 46;
 }
 
-message CdmData {
+message CdmData
+{
+    // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
     OdParameters odParameters = 2;
     AdditionalParameters additionalParameters = 3;
@@ -235,7 +591,8 @@ message CdmData {
     CovarianceMatrix covarianceMatrix = 5;
 }
 
-message CDM {
+message ConjunctionDataMessage
+{
     Header header = 1;
     RelativeMetadata relativeMetadata = 2;
     CdmMetadata cdmMetadata = 3;
