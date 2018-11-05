@@ -595,6 +595,8 @@ message ConjunctionDataMessage
 {
     Header header = 1;
     RelativeMetadata relativeMetadata = 2;
-    CdmMetadata cdmMetadata = 3;
-    CdmData cdmData = 4;
+    CdmMetadata object1Metadata = 3;
+    CdmMetadata object2Metadata = 4;
+    CdmData object1Data = 5;
+    CdmData object2Data = 6;
 }
