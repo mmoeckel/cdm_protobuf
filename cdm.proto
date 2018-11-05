@@ -77,7 +77,7 @@ message Header
 {
     // Format version in the form of ‘x.y’, where ‘y’ is incremented for corrections
     // and minor changes, and ‘x’ is incremented for major changes.
-    /*required*/ float CCSDS_CDM_VERS = 1;
+    /*required*/ string CCSDS_CDM_VERS = 1;
 
     // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 2;
