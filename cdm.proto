@@ -70,6 +70,12 @@ enum LiteralBool
 {
     YES = 0;
     NO = 1;
+}
+
+enum ManeuverabilityState
+{
+    MANEUVERABLE = 0;
+    NOT_MANEUVERABLE = 1;
     N_A = 2;
 }
 
@@ -191,7 +197,7 @@ message RelativeMetadata
     CollisionProbabilityMethod COLLISION_PROBABILITY_METHOD = 21;
 }
 
-message CdmMetadata
+message ObjectMetadata
 {
     // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
@@ -247,7 +253,7 @@ message CdmMetadata
     /*required*/ CovarianceMethod COVARIANCE_METHOD = 13;
 
     // The maneuver capacity of the object. YES, NO, or N/A (not applicable or not available)
-    /*required*/ LiteralBool MANEUVERABLE = 14;
+    /*required*/ ManeuverabilityState MANEUVERABLE = 14;
 
     // The central body about which Object1 and Object2 orbit. If not specified, the center is
     // assumed to be Earth.
@@ -581,7 +587,7 @@ message CovarianceMatrix
     double CTHR_THR = 46;
 }
 
-message CdmData
+message ObjectData
 {
     // All comments shall begin with the word "COMMENT" and at least one space prepended to every line.
     string COMMENT = 1;
@@ -595,8 +601,8 @@ message ConjunctionDataMessage
 {
     Header header = 1;
     RelativeMetadata relativeMetadata = 2;
-    CdmMetadata object1Metadata = 3;
-    CdmMetadata object2Metadata = 4;
-    CdmData object1Data = 5;
-    CdmData object2Data = 6;
+    ObjectMetadata object1Metadata = 3;
+    ObjectMetadata object2Metadata = 4;
+    ObjectData object1Data = 5;
+    ObjectData object2Data = 6;
 }
