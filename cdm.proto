@@ -378,27 +378,27 @@ message StateVector
 
     // Object Position Vector X component.
     // Unit: km
-    double X = 2;
+    /*required*/ double X = 2;
 
     // Object Position Vector Y component.
     // Unit: km
-    double Y = 3;
+    /*required*/ double Y = 3;
 
     // Object Position Vector Z component.
     // Unit: km
-    double Z = 4;
+    /*required*/ double Z = 4;
 
     // Object Velocity Vector X component.
     // Unit: km/s
-    double X_DOT = 5;
+    /*required*/ double X_DOT = 5;
 
     // Object Velocity Vector Y component.
     // Unit: km/s
-    double Y_DOT = 6;
+    /*required*/ double Y_DOT = 6;
 
     // Object Velocity Vector Z component.
     // Unit: km/s
-    double Z_DOT = 7;
+    /*required*/ double Z_DOT = 7;
 }
 
 message CovarianceMatrix
