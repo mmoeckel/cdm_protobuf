@@ -236,8 +236,33 @@ bool ConjunctionDataMessage::isComplete()
             && (object1StateVector.x() != 0.0 || object1StateVector.y() != 0.0 || object1StateVector.z() != 0.0 || object1StateVector.x_dot() != 0.0 || object1StateVector.y_dot() != 0.0 || object1StateVector.z_dot() != 0.0)
             && (object2StateVector.x() != 0.0 || object2StateVector.y() != 0.0 || object2StateVector.z() != 0.0 || object2StateVector.x_dot() != 0.0 || object2StateVector.y_dot() != 0.0 || object2StateVector.z_dot() != 0.0)
 
-            );    
+            );
 }
+
+// Non-obligatory setters follow
+
+void ConjunctionDataMessage::setRelativeSpeed(double v)
+{
+    relativeMetadata.set_relative_speed(v);
+}
+
+void ConjunctionDataMessage::setRelativePosition(double r, double t, double n)
+{
+    relativeMetadata.set_relative_position_r(r);
+    relativeMetadata.set_relative_position_t(t);
+    relativeMetadata.set_relative_position_n(n);
+}
+
+void ConjunctionDataMessage::setRelativeVelocity(double r, double t, double n)
+{
+    relativeMetadata.set_relative_velocity_r(r);
+    relativeMetadata.set_relative_velocity_t(t);
+    relativeMetadata.set_relative_velocity_n(n);
+}
+
+
+
+// Output functions
 
 std::string ConjunctionDataMessage::toKVN()
 {

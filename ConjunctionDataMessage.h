@@ -169,6 +169,10 @@ public:
     ///brief Check whether all obligatory fields are set
     bool isComplete();
 
+    void setRelativeSpeed(double v);
+    void setRelativePosition(double r, double t, double n);
+    void setRelativeVelocity(double r, double t, double n);
+
     ///brief Output in keyword=value notation
     std::string toKVN();
 
