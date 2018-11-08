@@ -92,6 +92,9 @@ public:
     ///brief Output in JSON
     std::string toJSON();
 
+    ///brief Output as protocol buffer serialized string.
+    std::string toProtobufString();
+
     std::string formatDate(
             const int year,
             const int month,
