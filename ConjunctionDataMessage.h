@@ -33,7 +33,7 @@ public:
     void setObject1Metadata(
             std::string designator,
             std::string intDesignator,
-            std::string catName,
+            std::string catalogName,
             std::string name,
             std::string ephemerisName,
             CDM::CovarianceMethod covMethod,
@@ -46,7 +46,7 @@ public:
     void setObject2Metadata(
             std::string designator,
             std::string intDesignator,
-            std::string catName,
+            std::string catalogName,
             std::string name,
             std::string ephemerisName,
             CDM::CovarianceMethod covMethod,

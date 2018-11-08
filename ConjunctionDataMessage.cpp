@@ -45,12 +45,12 @@ void ConjunctionDataMessage::setRelativeMetadata(std::string tca, double missDis
     relativeMetadata.set_miss_distance(missDistance);
 }
 
-void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::string intDesignator, std::string catName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
+void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
 {
     object1Meta.set_comment(comment);
     object1Meta.set_object(CDM::OBJECT1);
     object1Meta.set_object_designator(designator);
-    object1Meta.set_catalog_name(catName);
+    object1Meta.set_catalog_name(catalogName);
     object1Meta.set_object_name(name);
     object1Meta.set_international_designator(intDesignator);
     object1Meta.set_ephemeris_name(ephemerisName);
@@ -59,12 +59,12 @@ void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::str
     object1Meta.set_ref_frame(frame);
 }
 
-void ConjunctionDataMessage::setObject2Metadata(std::string designator, std::string intDesignator, std::string catName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
+void ConjunctionDataMessage::setObject2Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
 {
     object2Meta.set_comment(comment);
     object2Meta.set_object(CDM::OBJECT2);
     object2Meta.set_object_designator(designator);
-    object2Meta.set_catalog_name(catName);
+    object2Meta.set_catalog_name(catalogName);
     object2Meta.set_object_name(name);
     object2Meta.set_international_designator(intDesignator);
     object2Meta.set_ephemeris_name(ephemerisName);
