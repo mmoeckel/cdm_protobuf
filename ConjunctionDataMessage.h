@@ -10,6 +10,8 @@ class ConjunctionDataMessage
 public:
     ConjunctionDataMessage();
 
+    ConjunctionDataMessage(std::string received);
+
     ///brief Set message header fields
     void setHeader(
             std::string version,

@@ -10,6 +10,24 @@ ConjunctionDataMessage::ConjunctionDataMessage()
 
 }
 
+ConjunctionDataMessage::ConjunctionDataMessage(std::string received)
+{
+    CDM::ConjunctionDataMessage cdm;
+    cdm.ParseFromString(received);
+    header = cdm.header();
+    relativeMetadata = cdm.relativemetadata();
+    object1Meta = cdm.object1metadata();
+    object1ODParams = cdm.object1data().odparameters();
+    object1AdditionalParams = cdm.object1data().additionalparameters();
+    object1StateVector = cdm.object1data().statevector();
+    object1CovMatrix = cdm.object1data().covariancematrix();
+    object2Meta = cdm.object2metadata();
+    object2ODParams = cdm.object2data().odparameters();
+    object2AdditionalParams = cdm.object2data().additionalparameters();
+    object2StateVector = cdm.object2data().statevector();
+    object2CovMatrix = cdm.object2data().covariancematrix();
+}
+
 void ConjunctionDataMessage::setHeader(std::string version, std::string creationDate, std::string originator, std::string messageID, std::string messageFor, std::string comment)
 {
     header.set_ccsds_cdm_vers(version);
@@ -244,6 +262,13 @@ std::string ConjunctionDataMessage::toJSON()
     google::protobuf::util::MessageToJsonString(cdm, &result);
     return result;
 }
+
+std::string ConjunctionDataMessage::toProtobufString()
+{
+    CDM::ConjunctionDataMessage cdm = buildMessage();
+    return cdm.SerializeAsString();
+}
+
 
 CDM::ConjunctionDataMessage ConjunctionDataMessage::buildMessage()
 {
