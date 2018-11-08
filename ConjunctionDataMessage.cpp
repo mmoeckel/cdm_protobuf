@@ -295,6 +295,8 @@ std::string ConjunctionDataMessage::toProtobufString()
 }
 
 
+// Private auxiliary functions
+
 CDM::ConjunctionDataMessage ConjunctionDataMessage::buildMessage()
 {
     CDM::ObjectData* object1Data = new CDM::ObjectData(); //FIXME Comment field missing
@@ -328,12 +330,12 @@ std::string ConjunctionDataMessage::headerToKVN(CDM::Header header)
     headerComment << header.comment();
 
     std::stringstream kvn;
-    kvn << std::setw(36) << std::left << "CCSDS_CDM_VERS" << "=" << header.ccsds_cdm_vers() << std::endl;
+    kvn << formatValue("CCSDS_CDM_VERS", header.ccsds_cdm_vers(), "", true);
     kvn << formatComment(headerComment.str());
-    kvn << std::setw(36) << std::left << "CREATION_DATE" << "=" << header.creation_date() << std::endl;
-    kvn << std::setw(36) << std::left << "ORIGINATOR" << "=" << header.originator() << std::endl;
-    if (header.message_for().length() > 0) kvn << std::setw(36) << std::left << "MESSAGE_FOR" << "=" << header.message_for() << std::endl;
-    kvn << std::setw(36) << std::left << "MESSAGE_ID" << "=" << header.message_id() << std::endl;
+    kvn << formatValue("CREATION_DATE", header.creation_date(), "", true);
+    kvn << formatValue("ORIGINATOR", header.originator(), "", true);
+    kvn << formatValue("MESSAGE_FOR", header.message_for(), "", false);
+    kvn << formatValue("MESSAGE_ID", header.message_id(), "", true);
     return kvn.str();
 }
 
@@ -341,8 +343,15 @@ std::string ConjunctionDataMessage::relativeMetadataToKVN(CDM::RelativeMetadata 
 {
     std::stringstream kvn;
     kvn << formatComment(relativeMetadata.comment());
-    kvn << std::setw(36) << std::left << "TCA" << "=" << relativeMetadata.tca() << std::endl;
-    kvn << std::setw(36) << std::left << "MISS_DISTANCE" << "=" << std::setw(36) << std::left << relativeMetadata.miss_distance() << "[m]" << std::endl;
+    kvn << formatValue("TCA", relativeMetadata.tca(), "", true);
+    kvn << formatValue("MISS_DISTANCE", relativeMetadata.miss_distance(), "m", true);
+    kvn << formatValue("RELATIVE_SPEED", relativeMetadata.relative_speed(), "m/s", false);
+    kvn << formatValue("RELATIVE_POSITION_R", relativeMetadata.relative_position_r(), "m", false);
+    kvn << formatValue("RELATIVE_POSITION_T", relativeMetadata.relative_position_t(), "m", false);
+    kvn << formatValue("RELATIVE_POSITION_N", relativeMetadata.relative_position_n(), "m", false);
+    kvn << formatValue("RELATIVE_VELOCITY_R", relativeMetadata.relative_velocity_r(), "m", false);
+    kvn << formatValue("RELATIVE_VELOCITY_T", relativeMetadata.relative_velocity_t(), "m", false);
+    kvn << formatValue("RELATIVE_VELOCITY_N", relativeMetadata.relative_velocity_n(), "m", false);
     return kvn.str();
 }
 
@@ -350,15 +359,15 @@ std::string ConjunctionDataMessage::objectMetadataToKVN(CDM::ObjectMetadata obje
 {
     std::stringstream kvn;
     kvn << formatComment(objectMeta.comment());
-    kvn << std::setw(36) << std::left << "OBJECT" << "=" << formatObject(objectMeta.object()) << std::endl;
-    kvn << std::setw(36) << std::left << "OBJECT_DESIGNATOR" << "=" << objectMeta.object_designator() << std::endl;
-    kvn << std::setw(36) << std::left << "CATALOG_NAME" << "=" << objectMeta.catalog_name() << std::endl;
-    kvn << std::setw(36) << std::left << "OBJECT_NAME" << "=" << objectMeta.object_name() << std::endl;
-    kvn << std::setw(36) << std::left << "INTERNATIONAL_DESIGNATOR" << "=" << objectMeta.international_designator() << std::endl;
-    kvn << std::setw(36) << std::left << "EPHEMERIS_NAME" << "=" << objectMeta.ephemeris_name() << std::endl;
-    kvn << std::setw(36) << std::left << "COVARIANCE_METHOD" << "=" << formatCovarianceMethod(objectMeta.covariance_method()) << std::endl;
-    kvn << std::setw(36) << std::left << "MANEUVERABLE" << "=" << formatManeuverable(objectMeta.maneuverable()) << std::endl;
-    kvn << std::setw(36) << std::left << "REF_FRAME" << "=" << formatReferenceFrame(objectMeta.ref_frame()) << std::endl;
+    kvn << formatValue("OBJECT",                   formatObject(objectMeta.object()), "", true);
+    kvn << formatValue("OBJECT_DESIGNATOR",        objectMeta.object_designator(), "", true);
+    kvn << formatValue("CATALOG_NAME",             objectMeta.catalog_name(), "", true);
+    kvn << formatValue("OBJECT_NAME",              objectMeta.object_name(), "", true);
+    kvn << formatValue("INTERNATIONAL_DESIGNATOR", objectMeta.international_designator(), "", true);
+    kvn << formatValue("EPHEMERIS_NAME",           objectMeta.ephemeris_name(), "", true);
+    kvn << formatValue("COVARIANCE_METHOD",        formatCovarianceMethod(objectMeta.covariance_method()), "", true);
+    kvn << formatValue("MANEUVERABLE",             formatManeuverable(objectMeta.maneuverable()), "", true);
+    kvn << formatValue("REF_FRAME",                formatReferenceFrame(objectMeta.ref_frame()), "", true);
     return kvn.str();
 }
 
@@ -368,37 +377,61 @@ std::string ConjunctionDataMessage::objectDataToKVN(CDM::ObjectData objectData)
 
     CDM::StateVector objectStateVector = objectData.statevector();
     kvn << formatComment(objectStateVector.comment());
-    kvn << std::setw(36) << std::left << "X" << "=" << std::setw(36) << std::left << objectStateVector.x() << "[km]" << std::endl;
-    kvn << std::setw(36) << std::left << "Y" << "=" << std::setw(36) << std::left << objectStateVector.y() << "[km]" << std::endl;
-    kvn << std::setw(36) << std::left << "Z" << "=" << std::setw(36) << std::left << objectStateVector.z() << "[km]" << std::endl;
-    kvn << std::setw(36) << std::left << "X_DOT" << "=" << std::setw(36) << std::left << objectStateVector.x_dot() << "[km/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "Y_DOT" << "=" << std::setw(36) << std::left << objectStateVector.y_dot() << "[km/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "Z_DOT" << "=" << std::setw(36) << std::left << objectStateVector.z_dot() << "[km/s]" << std::endl;
+    kvn << formatValue("X", objectStateVector.x(), "km", true);
+    kvn << formatValue("Y", objectStateVector.y(), "km", true);
+    kvn << formatValue("Z", objectStateVector.z(), "km", true);
+    kvn << formatValue("X_DOT", objectStateVector.x_dot(), "km/s", true);
+    kvn << formatValue("Y_DOT", objectStateVector.y_dot(), "km/s", true);
+    kvn << formatValue("Z_DOT", objectStateVector.z_dot(), "km/s", true);
 
     CDM::CovarianceMatrix objectCovMatrix = objectData.covariancematrix();
     kvn << formatComment(objectCovMatrix.comment());
-    kvn << std::setw(36) << std::left << "CR_R" << "=" << std::setw(36) << std::left << objectCovMatrix.cr_r() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CT_R" << "=" << std::setw(36) << std::left << objectCovMatrix.ct_r() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CT_T" << "=" << std::setw(36) << std::left << objectCovMatrix.ct_t() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CN_R" << "=" << std::setw(36) << std::left << objectCovMatrix.cn_r() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CN_T" << "=" << std::setw(36) << std::left << objectCovMatrix.cn_t() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CN_N" << "=" << std::setw(36) << std::left << objectCovMatrix.cn_n() << "[m**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CRDOT_R" << "=" << std::setw(36) << std::left << objectCovMatrix.crdot_r() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CRDOT_T" << "=" << std::setw(36) << std::left << objectCovMatrix.crdot_t() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CRDOT_N" << "=" << std::setw(36) << std::left << objectCovMatrix.crdot_n() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CRDOT_RDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.crdot_rdot() << "[m**2/s**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CTDOT_R" << "=" << std::setw(36) << std::left << objectCovMatrix.ctdot_r() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CTDOT_T" << "=" << std::setw(36) << std::left << objectCovMatrix.ctdot_t() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CTDOT_N" << "=" << std::setw(36) << std::left << objectCovMatrix.ctdot_n() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CTDOT_RDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.ctdot_rdot() << "[m**2/s**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CTDOT_TDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.ctdot_tdot() << "[m**2/s**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_R" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_r() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_T" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_t() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_N" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_n() << "[m**2/s]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_RDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_rdot() << "[m**2/s**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_TDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_tdot() << "[m**2/s**2]" << std::endl;
-    kvn << std::setw(36) << std::left << "CNDOT_NDOT" << "=" << std::setw(36) << std::left << objectCovMatrix.cndot_ndot() << "[m**2/s**2]" << std::endl;
+    kvn << formatValue("CR_R",       objectCovMatrix.cr_r(),       "m**2"     , true);
+    kvn << formatValue("CT_R",       objectCovMatrix.ct_r(),       "m**2"     , true);
+    kvn << formatValue("CT_T",       objectCovMatrix.ct_t(),       "m**2"     , true);
+    kvn << formatValue("CN_R",       objectCovMatrix.cn_r(),       "m**2"     , true);
+    kvn << formatValue("CN_T",       objectCovMatrix.cn_t(),       "m**2"     , true);
+    kvn << formatValue("CN_N",       objectCovMatrix.cn_n(),       "m**2"     , true);
+    kvn << formatValue("CRDOT_R",    objectCovMatrix.crdot_r(),    "m**2/s"   , true);
+    kvn << formatValue("CRDOT_T",    objectCovMatrix.crdot_t(),    "m**2/s"   , true);
+    kvn << formatValue("CRDOT_N",    objectCovMatrix.crdot_n(),    "m**2/s"   , true);
+    kvn << formatValue("CRDOT_RDOT", objectCovMatrix.crdot_rdot(), "m**2/s**2", true);
+    kvn << formatValue("CTDOT_R",    objectCovMatrix.ctdot_r(),    "m**2/s"   , true);
+    kvn << formatValue("CTDOT_T",    objectCovMatrix.ctdot_t(),    "m**2/s"   , true);
+    kvn << formatValue("CTDOT_N",    objectCovMatrix.ctdot_n(),    "m**2/s"   , true);
+    kvn << formatValue("CTDOT_RDOT", objectCovMatrix.ctdot_rdot(), "m**2/s**2", true);
+    kvn << formatValue("CTDOT_TDOT", objectCovMatrix.ctdot_tdot(), "m**2/s**2", true);
+    kvn << formatValue("CNDOT_R",    objectCovMatrix.cndot_r(),    "m**2/s"   , true);
+    kvn << formatValue("CNDOT_T",    objectCovMatrix.cndot_t(),    "m**2/s"   , true);
+    kvn << formatValue("CNDOT_N",    objectCovMatrix.cndot_n(),    "m**2/s"   , true);
+    kvn << formatValue("CNDOT_RDOT", objectCovMatrix.cndot_rdot(), "m**2/s**2", true);
+    kvn << formatValue("CNDOT_TDOT", objectCovMatrix.cndot_tdot(), "m**2/s**2", true);
+    kvn << formatValue("CNDOT_NDOT", objectCovMatrix.cndot_ndot(), "m**2/s**2", true);
     return kvn.str();
+}
+
+std::string ConjunctionDataMessage::formatValue(std::string key, std::string value, std::string unit, bool obligatory)
+{
+    std::stringstream line;
+    if (obligatory || value.length() > 0)
+    {
+        line << std::setw(36) << std::left << key << "=" << std::setw(36) << std::left << value;
+        if (unit != "") line << "[" << unit << "]";
+        line << std::endl;
+    }
+    return line.str();
+}
+
+std::string ConjunctionDataMessage::formatValue(std::string key, double value, std::string unit, bool obligatory)
+{
+    std::stringstream line;
+    if (obligatory || value != 0.0)
+    {
+        line << std::setw(36) << std::left << key << "=" << std::setw(36) << std::left << value;
+        if (unit != "") line << "[" << unit << "]";
+        line << std::endl;
+    }
+    return line.str();
 }
 
 std::string ConjunctionDataMessage::formatDate(const int year, const int month, const int day, const int hour, const int minute, const double second)

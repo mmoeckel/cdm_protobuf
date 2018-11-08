@@ -213,6 +213,8 @@ private:
     std::string objectMetadataToKVN(CDM::ObjectMetadata objectMeta);
     std::string objectDataToKVN(CDM::ObjectData objectData);
 
+    std::string formatValue(std::string key, std::string value, std::string unit, bool obligatory);
+    std::string formatValue(std::string key, double value, std::string unit, bool obligatory);
     std::string formatComment(const std::string commentString);
     std::string formatManeuverable(const CDM::ManeuverabilityState state);
     std::string formatObject(const CDM::ObjectNumber object);
