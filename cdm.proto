@@ -355,12 +355,12 @@ message AdditionalParameters
     // Unit: kg
     double MASS = 5;
 
-    // The object’s C D •A/m used to propagate the state vector and covariance to TCA.
+    // The object’s CD*A/m used to propagate the state vector and covariance to TCA.
     // (See annex E for definition.)
     // Unit: m**2/kg
     double CD_AREA_OVER_MASS = 6;
 
-    // The object’s C r •A/m used to propagate the state vector and covariance to TCA.
+    // The object’s CR*A/m used to propagate the state vector and covariance to TCA.
     // (See annex E for definition.)
     // Unit: m**2/kg
     double CR_AREA_OVER_MASS = 7;
