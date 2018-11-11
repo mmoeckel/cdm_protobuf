@@ -349,9 +349,20 @@ std::string ConjunctionDataMessage::relativeMetadataToKVN(CDM::RelativeMetadata 
     kvn << formatValue("RELATIVE_POSITION_R", relativeMetadata.relative_position_r(), "m", false);
     kvn << formatValue("RELATIVE_POSITION_T", relativeMetadata.relative_position_t(), "m", false);
     kvn << formatValue("RELATIVE_POSITION_N", relativeMetadata.relative_position_n(), "m", false);
-    kvn << formatValue("RELATIVE_VELOCITY_R", relativeMetadata.relative_velocity_r(), "m", false);
-    kvn << formatValue("RELATIVE_VELOCITY_T", relativeMetadata.relative_velocity_t(), "m", false);
-    kvn << formatValue("RELATIVE_VELOCITY_N", relativeMetadata.relative_velocity_n(), "m", false);
+    kvn << formatValue("RELATIVE_VELOCITY_R", relativeMetadata.relative_velocity_r(), "m/s", false);
+    kvn << formatValue("RELATIVE_VELOCITY_T", relativeMetadata.relative_velocity_t(), "m/s", false);
+    kvn << formatValue("RELATIVE_VELOCITY_N", relativeMetadata.relative_velocity_n(), "m/s", false);
+    kvn << formatValue("START_SCREEN_PERIOD", relativeMetadata.start_screen_period(), "", false);
+    kvn << formatValue("STOP_SCREEN_PERIOD", relativeMetadata.stop_screen_period(), "", false);
+    kvn << formatValue("SCREEN_VOLUME_FRAME", relativeMetadata.screen_volume_frame(), "", false);
+    kvn << formatValue("SCREEN_VOLUME_SHAPE", relativeMetadata.screen_volume_shape(), "", false);
+    kvn << formatValue("SCREEN_VOLUME_X", relativeMetadata.screen_volume_x(), "m", false);
+    kvn << formatValue("SCREEN_VOLUME_Y", relativeMetadata.screen_volume_y(), "m", false);
+    kvn << formatValue("SCREEN_VOLUME_Z", relativeMetadata.screen_volume_z(), "m", false);
+    kvn << formatValue("SCREEN_ENTRY_TIME", relativeMetadata.screen_entry_time(), "", false);
+    kvn << formatValue("SCREEN_EXIT_TIME", relativeMetadata.screen_exit_time(), "", false);
+    kvn << formatValue("COLLISION_PROBABILITY", relativeMetadata.collision_probability(), "", false);
+    kvn << formatValue("COLLISION_PROBABILITY_METHOD", relativeMetadata.collision_probability_method(), "", false);
     return kvn.str();
 }
 
