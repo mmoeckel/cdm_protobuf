@@ -215,11 +215,15 @@ private:
 
     std::string formatValue(std::string key, std::string value, std::string unit, bool obligatory);
     std::string formatValue(std::string key, double value, std::string unit, bool obligatory);
+    std::string formatValue(std::string key, int value, std::string unit, bool obligatory);
     std::string formatComment(const std::string commentString);
     std::string formatManeuverable(const CDM::ManeuverabilityState state);
     std::string formatObject(const CDM::ObjectNumber object);
     std::string formatCovarianceMethod(const CDM::CovarianceMethod covmeth);
     std::string formatReferenceFrame(const CDM::ReferenceFrame frame);
+    std::string formatYesNo(const CDM::LiteralBool value);
+    std::string formatObjectType(const CDM::ObjectType type);
+
 };
 
 #endif // CONJUNCTIONDATAMESSAGE_H

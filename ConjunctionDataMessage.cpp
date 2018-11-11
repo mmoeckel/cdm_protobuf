@@ -445,6 +445,18 @@ std::string ConjunctionDataMessage::formatValue(std::string key, double value, s
     return line.str();
 }
 
+std::string ConjunctionDataMessage::formatValue(std::string key, int value, std::string unit, bool obligatory)
+{
+    std::stringstream line;
+    if (obligatory || value != 0)
+    {
+        line << std::setw(36) << std::left << key << "=" << std::setw(36) << std::left << value;
+        if (unit != "") line << "[" << unit << "]";
+        line << std::endl;
+    }
+    return line.str();
+}
+
 std::string ConjunctionDataMessage::formatDate(const int year, const int month, const int day, const int hour, const int minute, const double second)
 {
     std::stringstream dateString;
@@ -494,4 +506,20 @@ std::string ConjunctionDataMessage::formatReferenceFrame(const CDM::ReferenceFra
     if (frame == CDM::GCRF) return "GCRF";
     else if (frame == CDM::EME2000) return "EME2000";
     else return "ITRF";
+}
+
+std::string ConjunctionDataMessage::formatYesNo(const CDM::LiteralBool value)
+{
+    if (value == CDM::VALUE_NOT_SET) return "";
+    else if (value == CDM::YES) return "YES";
+    else return "NO";
+}
+
+std::string ConjunctionDataMessage::formatObjectType(const CDM::ObjectType type)
+{
+    if (type == CDM::PAYLOAD) return "PAYLOAD";
+    else if (type == CDM::ROCKET_BODY) return "ROCKET BODY";
+    else if (type == CDM::DEBRIS) return "DEBRIS";
+    else if (type == CDM::UNKNOWN) return "UNKNOWN";
+    else return "OTHER";
 }
