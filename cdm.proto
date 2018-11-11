@@ -46,11 +46,13 @@ enum ObjectNumber
 
 enum ObjectType
 {
-    PAYLOAD = 0;
-    ROCKET_BODY = 1;
-    DEBRIS = 2;
-    UNKNOWN = 3;
-    OTHER = 4;
+    // This is not a valid value according to the specification and needs to be caught!
+    OBJECT_TYPE_NOT_SET = 0;
+    PAYLOAD = 1;
+    ROCKET_BODY = 2;
+    DEBRIS = 3;
+    UNKNOWN = 4;
+    OTHER = 5;
 }
 
 enum CovarianceMethod
@@ -68,12 +70,15 @@ enum ReferenceFrame
 
 enum LiteralBool
 {
-    YES = 0;
-    NO = 1;
+    // This is not a valid value according to the specification and needs to be caught!
+    VALUE_NOT_SET = 0;
+    YES = 1;
+    NO = 2;
 }
 
 enum ManeuverabilityState
 {
+    // These need to be translated to "yes" and "no" according to the specification
     MANEUVERABLE = 0;
     NOT_MANEUVERABLE = 1;
     N_A = 2;
