@@ -375,16 +375,54 @@ std::string ConjunctionDataMessage::objectMetadataToKVN(CDM::ObjectMetadata obje
     kvn << formatValue("CATALOG_NAME",             objectMeta.catalog_name(), "", true);
     kvn << formatValue("OBJECT_NAME",              objectMeta.object_name(), "", true);
     kvn << formatValue("INTERNATIONAL_DESIGNATOR", objectMeta.international_designator(), "", true);
+    kvn << formatValue("OBJECT_TYPE",              formatObjectType(objectMeta.object_type()), "", false);
+    kvn << formatValue("OPERATOR_CONTACT_POSITION",objectMeta.operator_contact_position(), "", false);
+    kvn << formatValue("OPERATOR_ORGANIZATION",    objectMeta.operator_organization(), "", false);
+    kvn << formatValue("OPERATOR_PHONE",           objectMeta.operator_phone(), "", false);
+    kvn << formatValue("OPERATOR_EMAIL",           objectMeta.operator_email(), "", false);
     kvn << formatValue("EPHEMERIS_NAME",           objectMeta.ephemeris_name(), "", true);
     kvn << formatValue("COVARIANCE_METHOD",        formatCovarianceMethod(objectMeta.covariance_method()), "", true);
     kvn << formatValue("MANEUVERABLE",             formatManeuverable(objectMeta.maneuverable()), "", true);
+    kvn << formatValue("ORBIT_CENTER",             objectMeta.orbit_center(), "", false);
     kvn << formatValue("REF_FRAME",                formatReferenceFrame(objectMeta.ref_frame()), "", true);
+    kvn << formatValue("GRAVITY_MODEL",            objectMeta.gravity_model(), "", false);
+    kvn << formatValue("ATMOSPHERIC_MODEL",        objectMeta.atmospheric_model(), "", false);
+    kvn << formatValue("N_BODY_PERTURBATIONS",     objectMeta.n_body_perturbations(), "", false);
+    kvn << formatValue("SOLAR_RAD_PRESSURE",       formatYesNo(objectMeta.solar_rad_pressure()), "", false);
+    kvn << formatValue("EARTH_TIDES",              formatYesNo(objectMeta.earth_tides()),"", false);
+    kvn << formatValue("INTRACK_THRUST",           formatYesNo(objectMeta.intrack_thrust()), "", false);
     return kvn.str();
 }
 
 std::string ConjunctionDataMessage::objectDataToKVN(CDM::ObjectData objectData)
 {
     std::stringstream kvn;
+
+    kvn << formatComment(objectData.comment());
+
+    CDM::OdParameters od = objectData.odparameters();
+    kvn << formatComment(od.comment());
+    kvn << formatValue("TIME_LASTOB_START", od.time_lastob_start(), "", false);
+    kvn << formatValue("TIME_LASTOB_END", od.time_lastob_end(), "", false);
+    kvn << formatValue("RECOMMENDED_OD_SPAN", od.recommended_od_span(), "d", false);
+    kvn << formatValue("ACTUAL_OD_SPAN", od.actual_od_span(), "d", false);
+    kvn << formatValue("OBS_AVAILABLE", (int)od.obs_available(), "", false);
+    kvn << formatValue("OBS_USED", (int)od.obs_used(), "", false);
+    kvn << formatValue("TRACKS_AVAILABLE", (int)od.tracks_available(), "", false);
+    kvn << formatValue("TRACKS_USED", (int)od.tracks_used(), "", false);
+    kvn << formatValue("RESIDUALS_ACCEPTED", od.residuals_accepted(), "%", false);
+    kvn << formatValue("WEIGHTED_RMS", od.weighted_rms(), "", false);
+
+    CDM::AdditionalParameters ap = objectData.additionalparameters();
+    kvn << formatComment(ap.comment());
+    kvn << formatValue("AREA_PC", ap.area_pc(), "m**2", false);
+    kvn << formatValue("AREA_DRG", ap.area_drg(), "m**2", false);
+    kvn << formatValue("AREA_SRP", ap.area_srp(), "m**2", false);
+    kvn << formatValue("MASS", ap.mass(), "kg", false);
+    kvn << formatValue("CD_AREA_OVER_MASS", ap.cd_area_over_mass(), "m**2/kg", false);
+    kvn << formatValue("CR_AREA_OVER_MASS", ap.cr_area_over_mass(), "m**2/kg", false);
+    kvn << formatValue("THRUST_ACCELERATION", ap.thrust_acceleration(), "m/s**2", false);
+    kvn << formatValue("SEDR", ap.sedr(), "W/kg", false);
 
     CDM::StateVector objectStateVector = objectData.statevector();
     kvn << formatComment(objectStateVector.comment());
@@ -418,6 +456,30 @@ std::string ConjunctionDataMessage::objectDataToKVN(CDM::ObjectData objectData)
     kvn << formatValue("CNDOT_RDOT", objectCovMatrix.cndot_rdot(), "m**2/s**2", true);
     kvn << formatValue("CNDOT_TDOT", objectCovMatrix.cndot_tdot(), "m**2/s**2", true);
     kvn << formatValue("CNDOT_NDOT", objectCovMatrix.cndot_ndot(), "m**2/s**2", true);
+    kvn << formatValue("CDRG_R", objectCovMatrix.cdrg_r(), "m**3/kg", false);
+    kvn << formatValue("CDRG_T", objectCovMatrix.cdrg_t(), "m**3/kg", false);
+    kvn << formatValue("CDRG_N", objectCovMatrix.cdrg_n(), "m**3/kg", false);
+    kvn << formatValue("CDRG_RDOT", objectCovMatrix.cdrg_rdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CDRG_TDOT", objectCovMatrix.cdrg_tdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CDRG_NDOT", objectCovMatrix.cdrg_ndot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CDRG_DRG", objectCovMatrix.cdrg_drg(), "m**4/kg**2", false);
+    kvn << formatValue("CSRP_R", objectCovMatrix.csrp_r(), "m**3/kg", false);
+    kvn << formatValue("CSRP_T", objectCovMatrix.csrp_t(), "m**3/kg", false);
+    kvn << formatValue("CSRP_N", objectCovMatrix.csrp_n(), "m**3/kg", false);
+    kvn << formatValue("CSRP_RDOT", objectCovMatrix.csrp_rdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CSRP_TDOT", objectCovMatrix.csrp_tdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CSRP_NDOT", objectCovMatrix.csrp_ndot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CSRP_DRG", objectCovMatrix.csrp_drg(), "m**4/kg**2", false);
+    kvn << formatValue("CSRP_SRP", objectCovMatrix.csrp_srp(), "m**4/kg**2", false);
+    kvn << formatValue("CTHR_R", objectCovMatrix.cthr_r(), "m**3/kg", false);
+    kvn << formatValue("CTHR_T", objectCovMatrix.cthr_t(), "m**3/kg", false);
+    kvn << formatValue("CTHR_N", objectCovMatrix.cthr_n(), "m**3/kg", false);
+    kvn << formatValue("CTHR_RDOT", objectCovMatrix.cthr_rdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CTHR_TDOT", objectCovMatrix.cthr_tdot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CTHR_NDOT", objectCovMatrix.cthr_ndot(), "m**3/(kg*s)", false);
+    kvn << formatValue("CTHR_DRG", objectCovMatrix.cthr_drg(), "m**4/kg**2", false);
+    kvn << formatValue("CTHR_SRP", objectCovMatrix.cthr_srp(), "m**4/kg**2", false);
+    kvn << formatValue("CTHR_THR", objectCovMatrix.cthr_thr(), "m**4/kg**2", false);
     return kvn.str();
 }
 
