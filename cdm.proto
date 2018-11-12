@@ -9,33 +9,39 @@ package CDM;
 
 enum VolumeFrame
 {
-    RTN = 0;
-    TVN = 1;
+    // This is not a valid value according to the specification and needs to be caught!
+    VOLUME_FRAME_NOT_SET = 0;
+    RTN = 1;
+    TVN = 2;
 }
 
 enum VolumeShape
 {
-    ELLIPSOID = 0;
-    BOX = 1;
+    // This is not a valid value according to the specification and needs to be caught!
+    VOLUME_SHAPE_NOT_SET = 0;
+    ELLIPSOID = 1;
+    BOX = 2;
 }
 
 // Valid values for COLLISION_PROBABILITY_METHOD currently registered at https://sanaregistry.org
 enum CollisionProbabilityMethod
 {
-    AKELLAALFRIEND_2000 = 0;
-    ALFANO_2005 = 1;
-    ALFANO_MAX_PROBABILITY = 2;
-    ALFANO_PARAL_2007 = 3;
-    ALFANO_TUBES_2007 = 4;
-    ALFANO_VOXELS_2006 = 5;
-    ALFRIEND_1999 = 6;
-    CHAN_1997 = 7;
-    CHAN_2003 = 8;
-    FOSTER_1992 = 9;
-    MCKINLEY_2006 = 10;
-    PATERA_2001 = 11;
-    PATERA_2003 = 12;
-    PATERA_2005 = 13;
+    // This is not a valid value according to the specification and needs to be caught!
+    COLLISION_PROBABILITY_METHOD_NOT_SET = 0;
+    AKELLAALFRIEND_2000 = 1;
+    ALFANO_2005 = 2;
+    ALFANO_MAX_PROBABILITY = 3;
+    ALFANO_PARAL_2007 = 4;
+    ALFANO_TUBES_2007 = 5;
+    ALFANO_VOXELS_2006 = 6;
+    ALFRIEND_1999 = 7;
+    CHAN_1997 = 8;
+    CHAN_2003 = 9;
+    FOSTER_1992 = 10;
+    MCKINLEY_2006 = 11;
+    PATERA_2001 = 12;
+    PATERA_2003 = 13;
+    PATERA_2005 = 14;
 }
 
 enum ObjectNumber
@@ -57,8 +63,8 @@ enum ObjectType
 
 enum CovarianceMethod
 {
-    CALCULATED = 0;
-    DEFAULT = 1;
+    DEFAULT = 0;
+    CALCULATED = 1;
 }
 
 enum ReferenceFrame
@@ -78,10 +84,10 @@ enum LiteralBool
 
 enum ManeuverabilityState
 {
+    N_A = 0;
     // These need to be translated to "yes" and "no" according to the specification
-    MANEUVERABLE = 0;
-    NOT_MANEUVERABLE = 1;
-    N_A = 2;
+    MANEUVERABLE = 1;
+    NOT_MANEUVERABLE = 2;
 }
 
 message Header
