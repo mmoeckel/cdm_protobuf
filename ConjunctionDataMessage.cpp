@@ -266,7 +266,7 @@ void ConjunctionDataMessage::setRelativeVelocity(double r, double t, double n)
 
 std::string ConjunctionDataMessage::toKVN()
 {
-    CDM::ConjunctionDataMessage cdm = buildMessage();
+    CDM::ConjunctionDataMessage cdm = toProtobufMessage();
     std::stringstream kvn;
 
     // Write header
@@ -282,7 +282,7 @@ std::string ConjunctionDataMessage::toKVN()
 
 std::string ConjunctionDataMessage::toJSON()
 {
-    CDM::ConjunctionDataMessage cdm = buildMessage();
+    CDM::ConjunctionDataMessage cdm = toProtobufMessage();
     std::string result;
     google::protobuf::util::MessageToJsonString(cdm, &result);
     return result;
@@ -290,14 +290,11 @@ std::string ConjunctionDataMessage::toJSON()
 
 std::string ConjunctionDataMessage::toProtobufString()
 {
-    CDM::ConjunctionDataMessage cdm = buildMessage();
+    CDM::ConjunctionDataMessage cdm = toProtobufMessage();
     return cdm.SerializeAsString();
 }
 
-
-// Private auxiliary functions
-
-CDM::ConjunctionDataMessage ConjunctionDataMessage::buildMessage()
+CDM::ConjunctionDataMessage ConjunctionDataMessage::toProtobufMessage()
 {
     CDM::ObjectData* object1Data = new CDM::ObjectData(); //FIXME Comment field missing
     CDM::ObjectData* object2Data = new CDM::ObjectData();
@@ -318,6 +315,8 @@ CDM::ConjunctionDataMessage ConjunctionDataMessage::buildMessage()
     cdm.set_allocated_object2data(object2Data);
     return cdm;
 }
+
+// Private auxiliary functions
 
 std::string ConjunctionDataMessage::headerToKVN(CDM::Header header)
 {

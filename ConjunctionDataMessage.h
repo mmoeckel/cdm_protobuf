@@ -182,6 +182,8 @@ public:
     ///brief Output as protocol buffer serialized string.
     std::string toProtobufString();
 
+    CDM::ConjunctionDataMessage toProtobufMessage();
+
     std::string formatDate(
             const int year,
             const int month,
@@ -204,9 +206,6 @@ private:
     CDM::StateVector object2StateVector;
     CDM::CovarianceMatrix object1CovMatrix;
     CDM::CovarianceMatrix object2CovMatrix;
-
-
-    CDM::ConjunctionDataMessage buildMessage();
 
     std::string headerToKVN(CDM::Header header);
     std::string relativeMetadataToKVN(CDM::RelativeMetadata relativeMetadata);
