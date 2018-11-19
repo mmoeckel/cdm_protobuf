@@ -45,7 +45,7 @@ void ConjunctionDataMessage::setRelativeMetadata(std::string tca, double missDis
     relativeMetadata.set_miss_distance(missDistance);
 }
 
-void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
+void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::YesOrNo maneuverable, CDM::ReferenceFrame frame, std::string comment)
 {
     object1Meta.set_comment(comment);
     object1Meta.set_object(CDM::OBJECT1);
@@ -59,7 +59,7 @@ void ConjunctionDataMessage::setObject1Metadata(std::string designator, std::str
     object1Meta.set_ref_frame(frame);
 }
 
-void ConjunctionDataMessage::setObject2Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::ManeuverabilityState maneuverable, CDM::ReferenceFrame frame, std::string comment)
+void ConjunctionDataMessage::setObject2Metadata(std::string designator, std::string intDesignator, std::string catalogName, std::string name, std::string ephemerisName, CDM::CovarianceMethod covMethod, CDM::YesOrNo maneuverable, CDM::ReferenceFrame frame, std::string comment)
 {
     object2Meta.set_comment(comment);
     object2Meta.set_object(CDM::OBJECT2);
@@ -219,7 +219,7 @@ bool ConjunctionDataMessage::isComplete()
             && object1Meta.object_name().length() > 0
             && object1Meta.international_designator().length() > 0
             && (object1Meta.covariance_method() == CDM::CALCULATED || object1Meta.covariance_method() == CDM::DEFAULT)
-            && (object1Meta.maneuverable() == CDM::MANEUVERABLE || object1Meta.maneuverable() == CDM::NOT_MANEUVERABLE || object1Meta.maneuverable() == CDM::N_A)
+            && (object1Meta.maneuverable() == CDM::YES || object1Meta.maneuverable() == CDM::NO || object1Meta.maneuverable() == CDM::N_A)
             && (object1Meta.ref_frame() == CDM::GCRF || object1Meta.ref_frame() == CDM::EME2000 || object1Meta.ref_frame() == CDM::ITRF)
 
             && object2Meta.object() == CDM::OBJECT2
@@ -228,7 +228,7 @@ bool ConjunctionDataMessage::isComplete()
             && object2Meta.object_name().length() > 0
             && object2Meta.international_designator().length() > 0
             && (object2Meta.covariance_method() == CDM::CALCULATED || object2Meta.covariance_method() == CDM::DEFAULT)
-            && (object2Meta.maneuverable() == CDM::MANEUVERABLE || object2Meta.maneuverable() == CDM::NOT_MANEUVERABLE || object2Meta.maneuverable() == CDM::N_A)
+            && (object2Meta.maneuverable() == CDM::YES || object2Meta.maneuverable() == CDM::NO || object2Meta.maneuverable() == CDM::N_A)
             && (object2Meta.ref_frame() == CDM::GCRF || object2Meta.ref_frame() == CDM::EME2000 || object2Meta.ref_frame() == CDM::ITRF)
 
             // State vector is considered valid if at least one value is non-zero.
@@ -381,7 +381,7 @@ std::string ConjunctionDataMessage::objectMetadataToKVN(CDM::ObjectMetadata obje
     kvn << formatValue("OPERATOR_EMAIL",           objectMeta.operator_email(), "", false);
     kvn << formatValue("EPHEMERIS_NAME",           objectMeta.ephemeris_name(), "", true);
     kvn << formatValue("COVARIANCE_METHOD",        formatCovarianceMethod(objectMeta.covariance_method()), "", true);
-    kvn << formatValue("MANEUVERABLE",             formatManeuverable(objectMeta.maneuverable()), "", true);
+    kvn << formatValue("MANEUVERABLE",             formatYesNo(objectMeta.maneuverable()), "", true);
     kvn << formatValue("ORBIT_CENTER",             objectMeta.orbit_center(), "", false);
     kvn << formatValue("REF_FRAME",                formatReferenceFrame(objectMeta.ref_frame()), "", true);
     kvn << formatValue("GRAVITY_MODEL",            objectMeta.gravity_model(), "", false);
@@ -543,13 +543,6 @@ std::string ConjunctionDataMessage::formatComment(const std::string commentStrin
     else return "";
 }
 
-std::string ConjunctionDataMessage::formatManeuverable(const CDM::ManeuverabilityState state)
-{
-    if (state == CDM::MANEUVERABLE) return "YES";
-    else if (state == CDM::NOT_MANEUVERABLE) return "NO";
-    else return "N/A";
-}
-
 std::string ConjunctionDataMessage::formatObject(const CDM::ObjectNumber object)
 {
     if (object == CDM::OBJECT1) return "OBJECT1";
@@ -569,11 +562,11 @@ std::string ConjunctionDataMessage::formatReferenceFrame(const CDM::ReferenceFra
     else return "ITRF";
 }
 
-std::string ConjunctionDataMessage::formatYesNo(const CDM::LiteralBool value)
+std::string ConjunctionDataMessage::formatYesNo(const CDM::YesOrNo value)
 {
-    if (value == CDM::VALUE_NOT_SET) return "";
+    if (value == CDM::NO) return "NO";
     else if (value == CDM::YES) return "YES";
-    else return "NO";
+    else return "N/A";
 }
 
 std::string ConjunctionDataMessage::formatObjectType(const CDM::ObjectType type)

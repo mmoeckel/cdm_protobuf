@@ -74,20 +74,12 @@ enum ReferenceFrame
     ITRF = 2;
 }
 
-enum LiteralBool
+enum YesOrNo
 {
-    // This is not a valid value according to the specification and needs to be caught!
-    VALUE_NOT_SET = 0;
+    // N_A is only valid for MANEUVERABLE
+    N_A = 0;
     YES = 1;
     NO = 2;
-}
-
-enum ManeuverabilityState
-{
-    N_A = 0;
-    // These need to be translated to "yes" and "no" according to the specification
-    MANEUVERABLE = 1;
-    NOT_MANEUVERABLE = 2;
 }
 
 message Header
@@ -264,7 +256,7 @@ message ObjectMetadata
     /*required*/ CovarianceMethod COVARIANCE_METHOD = 13;
 
     // The maneuver capacity of the object. YES, NO, or N/A (not applicable or not available)
-    /*required*/ ManeuverabilityState MANEUVERABLE = 14;
+    /*required*/ YesOrNo MANEUVERABLE = 14;
 
     // The central body about which Object1 and Object2 orbit. If not specified, the center is
     // assumed to be Earth.
@@ -287,13 +279,13 @@ message ObjectMetadata
 
     // Indication of whether solar radiation pressure perturbations were used for the
     // OD of the object. YES or NO.
-    LiteralBool SOLAR_RAD_PRESSURE = 20;
+    YesOrNo SOLAR_RAD_PRESSURE = 20;
 
     // Indication of whether solid Earth and ocean tides were  used for the OD of the object. YES or NO.
-    LiteralBool EARTH_TIDES = 21;
+    YesOrNo EARTH_TIDES = 21;
 
     // Indication of whether in-track thrust modeling was used for the OD of the object. YES or NO.
-    LiteralBool INTRACK_THRUST = 22;
+    YesOrNo INTRACK_THRUST = 22;
 }
 
 message OdParameters

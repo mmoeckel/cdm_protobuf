@@ -79,7 +79,7 @@ public:
             std::string name,
             std::string ephemerisName,
             CDM::CovarianceMethod covMethod,
-            CDM::ManeuverabilityState maneuverable,
+            CDM::YesOrNo maneuverable,
             CDM::ReferenceFrame frame,
             std::string comment = ""
             );
@@ -117,7 +117,7 @@ public:
             std::string name,
             std::string ephemerisName,
             CDM::CovarianceMethod covMethod,
-            CDM::ManeuverabilityState maneuverable,
+            CDM::YesOrNo maneuverable,
             CDM::ReferenceFrame frame,
             std::string comment = ""
             );
@@ -216,11 +216,10 @@ private:
     std::string formatValue(std::string key, double value, std::string unit, bool obligatory);
     std::string formatValue(std::string key, int value, std::string unit, bool obligatory);
     std::string formatComment(const std::string commentString);
-    std::string formatManeuverable(const CDM::ManeuverabilityState state);
     std::string formatObject(const CDM::ObjectNumber object);
     std::string formatCovarianceMethod(const CDM::CovarianceMethod covmeth);
     std::string formatReferenceFrame(const CDM::ReferenceFrame frame);
-    std::string formatYesNo(const CDM::LiteralBool value);
+    std::string formatYesNo(const CDM::YesOrNo value);
     std::string formatObjectType(const CDM::ObjectType type);
 
 };
