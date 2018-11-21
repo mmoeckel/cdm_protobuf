@@ -219,7 +219,7 @@ private:
     std::string formatObject(const CDM::ObjectNumber object);
     std::string formatCovarianceMethod(const CDM::CovarianceMethod covmeth);
     std::string formatReferenceFrame(const CDM::ReferenceFrame frame);
-    std::string formatYesNo(const CDM::YesOrNo value);
+    std::string formatYesNo(const CDM::YesOrNo value, bool allowNA);
     std::string formatObjectType(const CDM::ObjectType type);
 
 };

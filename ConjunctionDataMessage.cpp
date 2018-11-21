@@ -381,15 +381,15 @@ std::string ConjunctionDataMessage::objectMetadataToKVN(CDM::ObjectMetadata obje
     kvn << formatValue("OPERATOR_EMAIL",           objectMeta.operator_email(), "", false);
     kvn << formatValue("EPHEMERIS_NAME",           objectMeta.ephemeris_name(), "", true);
     kvn << formatValue("COVARIANCE_METHOD",        formatCovarianceMethod(objectMeta.covariance_method()), "", true);
-    kvn << formatValue("MANEUVERABLE",             formatYesNo(objectMeta.maneuverable()), "", true);
+    kvn << formatValue("MANEUVERABLE",             formatYesNo(objectMeta.maneuverable(), true), "", true);
     kvn << formatValue("ORBIT_CENTER",             objectMeta.orbit_center(), "", false);
     kvn << formatValue("REF_FRAME",                formatReferenceFrame(objectMeta.ref_frame()), "", true);
     kvn << formatValue("GRAVITY_MODEL",            objectMeta.gravity_model(), "", false);
     kvn << formatValue("ATMOSPHERIC_MODEL",        objectMeta.atmospheric_model(), "", false);
     kvn << formatValue("N_BODY_PERTURBATIONS",     objectMeta.n_body_perturbations(), "", false);
-    kvn << formatValue("SOLAR_RAD_PRESSURE",       formatYesNo(objectMeta.solar_rad_pressure()), "", false);
-    kvn << formatValue("EARTH_TIDES",              formatYesNo(objectMeta.earth_tides()),"", false);
-    kvn << formatValue("INTRACK_THRUST",           formatYesNo(objectMeta.intrack_thrust()), "", false);
+    kvn << formatValue("SOLAR_RAD_PRESSURE",       formatYesNo(objectMeta.solar_rad_pressure(), false), "", false);
+    kvn << formatValue("EARTH_TIDES",              formatYesNo(objectMeta.earth_tides(), false),"", false);
+    kvn << formatValue("INTRACK_THRUST",           formatYesNo(objectMeta.intrack_thrust(), false), "", false);
     return kvn.str();
 }
 
@@ -562,11 +562,11 @@ std::string ConjunctionDataMessage::formatReferenceFrame(const CDM::ReferenceFra
     else return "ITRF";
 }
 
-std::string ConjunctionDataMessage::formatYesNo(const CDM::YesOrNo value)
+std::string ConjunctionDataMessage::formatYesNo(const CDM::YesOrNo value, bool allowNA)
 {
     if (value == CDM::NO) return "NO";
     else if (value == CDM::YES) return "YES";
-    else return "N/A";
+    else return (allowNA ? "N/A" : "");
 }
 
 std::string ConjunctionDataMessage::formatObjectType(const CDM::ObjectType type)
