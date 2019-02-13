@@ -198,6 +198,9 @@ message RelativeMetadata
     // A list of currently registered options is available on the SANA Registry at
     // http://sanaregistry.org. (To register a new option for this keyword, see annex B, subsection B2.)
     CollisionProbabilityMethod COLLISION_PROBABILITY_METHOD = 21;
+
+    // EXTENSION (NON-STANDARD) VALUE: Time of closest approach as a Julian Date.
+    double EXT_TCA_JD = 22;
 }
 
 message ObjectMetadata
