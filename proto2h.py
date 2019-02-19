@@ -115,26 +115,52 @@ def generateMessageAdapter(m,package,namespace,enumNames,messageNames):
     p2c += "    " + namespace + "::" + name + " result;\n"
     c2p += "    " + package   + "::" + name + " result;\n"
     for v in elements:
+        otherPackage = ""
         repeat = v[0]
         type = v[1]
-        type = re.sub("\.","_C::",type)
+        if ("." in type):
+            otherPackage = type.split(".")[0]
+            type = type.split(".")[1]
+            # FIXME: This is assuming that everything from another package is a message!
+            messageNames.append(type)
         variable = v[2]
         if type in enumNames:
             # Element is an enum. Convert between protobuf and C++ before assigning.
             p2c += "    result." + variable + " = " + type + "(in." + variable.lower() + "());\n"
             c2p += "    result.set_" + variable.lower() + "(" + type + "(in." + variable + "));\n";
         elif type in messageNames:
-            # Element is a message/struct. Convert and use pointers and "set_allocated_" functions.
-            p2c += "    result." + variable + " = " + type + "(in." + variable.lower() + "());\n"
-            c2p += "    " + package + "::" + type + "* " + variable.lower() + "_inst = new " + package + "::" + type + "(" + type + "(in." + variable + "));\n"
-            c2p += "    result.set_allocated_" + variable.lower() + "(" + variable.lower() + "_inst);\n"
+            if (repeat == "repeated "):
+                p2c_in = type + "(in." + variable.lower() + "(i))"
+                if (otherPackage != ""):
+                    p2c_in = otherPackage + "_PA::" + p2c_in
+                p2c += "    for (int i=0; i<=in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
+                c2p_in = type + "(in." + variable + "[i]))"
+                if (otherPackage != ""):
+                    c2p_in = otherPackage + "_PA::" + c2p_in
+                    c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) {\n"
+                    c2p += "        " + otherPackage + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
+                    c2p += "        " + variable.lower() + "_inst = new " + otherPackage + "::" + type + "(" + c2p_in + ";\n"
+                    c2p += "    }\n"
+                else:
+                    c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) {\n"
+                    c2p += "        " + package + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
+                    c2p += "        " + variable.lower() + "_inst = new " + package + "::" + type + "(" + c2p_in + ";\n"
+                    c2p += "    }\n"
+
+            else:
+                # Element is a message/struct. Convert and use pointers and "set_allocated_" functions.
+                p2c += "    result." + variable + " = " + type + "(in." + variable.lower() + "());\n"
+                c2p += "    " + package + "::" + type + "* " + variable.lower() + "_inst = new " + package + "::" + type + "(" + type + "(in." + variable + "));\n"
+                c2p += "    result.set_allocated_" + variable.lower() + "(" + variable.lower() + "_inst);\n"
         else:
             # Element is a primitive data type
             if (repeat == "repeated "):
-                p2c += "    for (int i=0; i<=in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(in." + variable.lower() + "(i)); }\n"
+                p2c_in = "in." + variable.lower() + "(i)"
+                p2c += "    for (int i=0; i<=in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
                 c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) { result.add_" + variable.lower() + "(in." + variable + "[i]); }\n"
             else:
-                p2c += "    result." + variable + " = in." + variable.lower() + "();\n"
+                p2c_in = "in." + variable.lower() + "()"
+                p2c += "    result." + variable + " = " + p2c_in + ";\n"
                 c2p += "    result.set_" + variable.lower() + "(in." + variable + ");\n"
     p2c += "    return result;\n}\n\n"
     c2p += "    return result;\n}\n\n"
