@@ -133,16 +133,16 @@ def generateMessageAdapter(m,package,namespace,enumNames,messageNames):
                 p2c_in = type + "(in." + variable.lower() + "(i))"
                 if (otherPackage != ""):
                     p2c_in = otherPackage + "_PA::" + p2c_in
-                p2c += "    for (int i=0; i<=in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
+                p2c += "    for (int i=0; i<in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
                 c2p_in = type + "(in." + variable + "[i]))"
                 if (otherPackage != ""):
                     c2p_in = otherPackage + "_PA::" + c2p_in
-                    c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) {\n"
+                    c2p += "    for (int i=0; i<in." + variable + ".size(); i++) {\n"
                     c2p += "        " + otherPackage + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
                     c2p += "        " + variable.lower() + "_inst = new " + otherPackage + "::" + type + "(" + c2p_in + ";\n"
                     c2p += "    }\n"
                 else:
-                    c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) {\n"
+                    c2p += "    for (int i=0; i<in." + variable + ".size(); i++) {\n"
                     c2p += "        " + package + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
                     c2p += "        " + variable.lower() + "_inst = new " + package + "::" + type + "(" + c2p_in + ";\n"
                     c2p += "    }\n"
@@ -156,8 +156,8 @@ def generateMessageAdapter(m,package,namespace,enumNames,messageNames):
             # Element is a primitive data type
             if (repeat == "repeated "):
                 p2c_in = "in." + variable.lower() + "(i)"
-                p2c += "    for (int i=0; i<=in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
-                c2p += "    for (int i=0; i<=in." + variable + ".size(); i++) { result.add_" + variable.lower() + "(in." + variable + "[i]); }\n"
+                p2c += "    for (int i=0; i<in." + variable.lower() + "_size(); i++) { result." + variable + ".push_back(" + p2c_in + "); }\n"
+                c2p += "    for (int i=0; i<in." + variable + ".size(); i++) { result.add_" + variable.lower() + "(in." + variable + "[i]); }\n"
             else:
                 p2c_in = "in." + variable.lower() + "()"
                 p2c += "    result." + variable + " = " + p2c_in + ";\n"
