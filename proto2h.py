@@ -138,13 +138,11 @@ def generateMessageAdapter(m,package,namespace,enumNames,messageNames):
                 if (otherPackage != ""):
                     c2p_in = otherPackage + "_PA::" + c2p_in
                     c2p += "    for (int i=0; i<in." + variable + ".size(); i++) {\n"
-                    c2p += "        " + otherPackage + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
-                    c2p += "        " + variable.lower() + "_inst = new " + otherPackage + "::" + type + "(" + c2p_in + ";\n"
+                    c2p += "        result.mutable_" + variable.lower() + "()->AddAllocated(new " + otherPackage + "::" + type + "(" + c2p_in + ";\n"
                     c2p += "    }\n"
                 else:
                     c2p += "    for (int i=0; i<in." + variable + ".size(); i++) {\n"
-                    c2p += "        " + package + "::" + type + "* " + variable.lower() + "_inst = result.add_" + variable.lower() + "();\n"
-                    c2p += "        " + variable.lower() + "_inst = new " + package + "::" + type + "(" + c2p_in + ";\n"
+                    c2p += "        result.mutable_" + variable.lower() + "()->AddAllocated(new " + package + "::" + type + "(" + c2p_in + ";\n"
                     c2p += "    }\n"
 
             else:
