@@ -249,7 +249,7 @@ std::string CDMWriter::formatValue(std::string key, double value, std::string un
     std::stringstream line;
     if (obligatory || value != 0.0)
     {
-        line << std::setw(36) << std::left << key << "=" << std::setw(36) << std::left << value;
+        line << std::setw(36) << std::left << key << "=" << std::setw(36) << std::left << std::setprecision(15) << value;
         if (unit != "") line << "[" << unit << "]";
         line << std::endl;
     }
