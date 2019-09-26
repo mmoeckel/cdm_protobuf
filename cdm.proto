@@ -289,6 +289,9 @@ message ObjectMetadata
 
     // Indication of whether in-track thrust modeling was used for the OD of the object. YES or NO.
     YesOrNo INTRACK_THRUST = 22;
+
+    // EXTENSION: Epoch when the object data was created as Julian Date.
+    double EXT_ORIGINAL_EPOCH_JD = 23;
 }
 
 message OdParameters
