@@ -42,6 +42,7 @@ enum CollisionProbabilityMethod
     PATERA_2001 = 12;
     PATERA_2003 = 13;
     PATERA_2005 = 14;
+    ALFANO_LIN_2009 = 15; //NON-STANDARD!
 }
 
 enum ObjectNumber
@@ -201,6 +202,20 @@ message RelativeMetadata
 
     // EXTENSION (NON-STANDARD) VALUE: Time of closest approach as a Julian Date.
     double EXT_TCA_JD = 22;
+
+    double EXT_TCA_JD_START = 23;
+    double EXT_TCA_JD_END = 24;
+    double EXT_COMBINED_HARDBODY_RADIUS = 25;
+    double EXT_MAHALANOBIS_DISTANCE_AT_TCA = 26;
+    double EXT_TIME_OF_CLOSEST_MAHALANOBIS_DISTANCE = 27;
+    double EXT_DISTANCE_AT_CLOSEST_MAHALANOBIS_DISTANCE = 28;
+    double EXT_MAHALANOBIS_DISTANCE_AT_CLOSEST_MAHALANOBIS_DISTANCE = 29;
+    double EXT_RELATIVE_SPEED_AT_CLOSEST_MAHALANOBIS_DISTANCE = 30;
+    double EXT_PC_THRESHOLD = 31;
+    double EXT_PC_PARTICLEAPPROACH = 32;
+    double EXT_PC_CONFIDENCE_DAGUMBOUND = 33;
+    double EXT_PC_ABSOLUTE_ERROR_DAGUMBOUND = 34;
+    uint64 EXT_PC_SAMPLESIZE = 35;
 }
 
 message ObjectMetadata
@@ -292,6 +307,17 @@ message ObjectMetadata
 
     // EXTENSION: Epoch when the object data was created as Julian Date.
     double EXT_ORIGINAL_EPOCH_JD = 23;
+    string EXT_MVN_COMMENT = 24;
+    bool EXT_MVN_POS_AT_TCA = 25;
+    bool EXT_MVN_POS_WITHIN_REVOLUTION = 26;
+    bool EXT_MVN_POS_WITHIN_ENCOUNTER_DURATION = 27;
+    bool EXT_MVN_POSVEL_AT_TCA = 28;
+    bool EXT_MVN_POSVEL_WITHIN_REVOLUTION = 29;
+    bool EXT_MVN_POSVEL_WITHIN_ENCOUNTER_DURATION = 30;
+    string EXT_REOBSERVATION_PRIORITY_COMMENT = 31;
+    string EXT_REOBSERVATION_WEIGHT_COMMENT = 32;
+    int32 EXT_REOBSERVATION_PRIORITY = 33;
+    double EXT_REOBSERVATION_WEIGHT = 34;
 }
 
 message OdParameters
