@@ -33,8 +33,20 @@ def getDefaultValue(type):
         return " = 0.0"
     elif (type == "uint32"):
         return " = 0"
+    elif (type == "sint32"):
+        return " = 0"
+    elif (type == "uint64"):
+        return " = 0"
+    elif (type == "sint64"):
+        return " = 0"
+    elif (type == "int32"):
+        return " = 0"
+    elif (type == "int64"):
+        return " = 0"
     elif (type == "string"):
         return " = \"\""
+    elif (type == "bool"):
+        return " = false"
     else:
         return ""
 
@@ -101,6 +113,9 @@ def convertMessage(m):
     # This list needs to be extended.
     cppStruct = re.sub("string","std::string",cppStruct)
     cppStruct = re.sub("uint32","unsigned int",cppStruct)
+    cppStruct = re.sub("uint64","unsigned long",cppStruct)
+    cppStruct = re.sub("int32","int",cppStruct)
+    cppStruct = re.sub("int64","long",cppStruct)
     return cppStruct
 
 
