@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     cdm.object1Metadata.OBJECT_DESIGNATOR = "48113";
     cdm.object1Metadata.INTERNATIONAL_DESIGNATOR = "2019-001A";
     cdm.object1Metadata.CATALOG_NAME = "EOSCAT";
-    cdm.object1Metadata.OBJECT_NAME = "ALWES-1";
+    cdm.object1Metadata.OBJECT_NAME = "TEST-1";
     cdm.object1Metadata.EPHEMERIS_NAME = "NONE";
     cdm.object1Metadata.COVARIANCE_METHOD = CDM_C::CALCULATED;
     cdm.object1Metadata.MANEUVERABLE = CDM_C::NO;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     cdm.object2Metadata.OBJECT_DESIGNATOR = "50129";
     cdm.object2Metadata.INTERNATIONAL_DESIGNATOR = "2020-014A";
     cdm.object2Metadata.CATALOG_NAME = "EOSCAT";
-    cdm.object2Metadata.OBJECT_NAME = "PACMAN";
+    cdm.object2Metadata.OBJECT_NAME = "TEST-2";
     cdm.object2Metadata.EPHEMERIS_NAME = "NONE";
     cdm.object2Metadata.COVARIANCE_METHOD = CDM_C::DEFAULT;
     cdm.object2Metadata.MANEUVERABLE = CDM_C::NO;
@@ -49,12 +49,14 @@ int main(int argc, char *argv[])
     cdm.object2Data.stateVector.X_DOT = 0.01;
     cdm.object2Data.stateVector.Y_DOT = 0.67;
     cdm.object2Data.stateVector.Z_DOT = 7.34;
-    std::cout << writer.toKVN(cdm);
+    std::cout << writer.toKVN(cdm);    
 
     CDM::ConjunctionDataMessage protoCDM = CDM_PA::ConjunctionDataMessage(cdm);
     CDM_C::ConjunctionDataMessage cdm2 = CDM_PA::ConjunctionDataMessage(protoCDM);
     //std::cout << protoCDM.SerializeAsString() << std::endl;
     std::cout << writer.toKVN(cdm2);
+
+    std::cout << writer.toJSON(cdm);
 
     return 0;
 }
