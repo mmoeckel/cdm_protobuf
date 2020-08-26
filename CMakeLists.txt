@@ -21,6 +21,14 @@ find_package(PythonInterp REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
 PROTOBUF_GENERATE_CPP(PROTO_CC PROTO_H cdm.proto)
+PROTOBUF_GENERATE_PYTHON(PROTO_PY cdm.proto)
+
+add_custom_target(cdm_protobuf ALL
+    DEPENDS
+        ${PROTO_CC}
+        ${PROTO_H}
+        ${PROTO_PY}
+)
 
 add_custom_command(
         OUTPUT
