@@ -216,6 +216,8 @@ message RelativeMetadata
     double EXT_PC_CONFIDENCE_DAGUMBOUND = 33;
     double EXT_PC_ABSOLUTE_ERROR_DAGUMBOUND = 34;
     uint64 EXT_PC_SAMPLESIZE = 35;
+
+    double EXT_COLLISION_PROBABILITY_MAX = 36;
 }
 
 message ObjectMetadata

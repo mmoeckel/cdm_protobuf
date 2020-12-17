@@ -141,6 +141,7 @@ std::string CDMWriter::relativeMetadataToText(CDM_C::RelativeMetadata relativeMe
     out << formatValue("SCREEN_EXIT_TIME", relativeMetadata.SCREEN_EXIT_TIME, "", false, mode);
     out << formatValue("COLLISION_PROBABILITY", relativeMetadata.COLLISION_PROBABILITY, "", false, mode);
     out << formatValue("COLLISION_PROBABILITY_METHOD", formatCollisionProbabilityMethod(relativeMetadata.COLLISION_PROBABILITY_METHOD), "", false, mode);
+    if (mode == OUT_JSON) out << formatValue("EXT_COLLISION_PROBABILITY_MAX", relativeMetadata.EXT_COLLISION_PROBABILITY_MAX, "", false, mode);
     if (mode == OUT_JSON) { out.seekp(-2, out.cur); out << "}"; }
     return out.str();
 }
